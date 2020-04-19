@@ -27,9 +27,13 @@ def main_window():
     select_label.grid(column=0, row=1)
 
     image_choice = StringVar()
-    organ_choice_box = ttk.Combobox(root, textvariable=image_choice)
-    organ_choice_box.grid(column=1, row=1)
-    organ_choice_box['values'] = ()
+    image_choice_box = ttk.Combobox(root, textvariable=image_choice)
+    image_choice_box.grid(column=1, row=1)
+    image_choice_box['values'] = ("acl1.jpg", "acl2.jpg", "esophagus1.jpg",
+                                  "esophagus2.jpg", "synpic50411.jpg",
+                                  "synpic51041.jpg", "synpic51042.jpg",
+                                  "upj1.jpg", "upj2.jpg")
+    image_choice_box.state(["readonly"])
 
     # Add Radiobuttons
     action_label = ttk.Label(root, text="Action:")

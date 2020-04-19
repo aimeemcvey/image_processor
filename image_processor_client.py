@@ -55,6 +55,9 @@ def main_window():
 
 
 def upload_new_window():
+    def back_button():
+        root.destroy()
+        return
 
     root = Tk()  # sets up main window
     root.title("Upload New")
@@ -76,7 +79,7 @@ def upload_new_window():
     # Add buttons
     upload_btn = ttk.Button(root, text="Upload")  # command=upload_button)
     upload_btn.grid(column=0, row=6)
-    back_btn = ttk.Button(root, text="Back")  # command=back_button)
+    back_btn = ttk.Button(root, text="Back", command=back_button)
     back_btn.grid(column=1, row=6)
 
     return

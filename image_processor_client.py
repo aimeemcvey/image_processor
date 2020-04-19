@@ -1,6 +1,9 @@
 # image_processor_client.py
 from tkinter import *
 from tkinter import ttk
+import requests
+server_name = "http://127.0.0.1:5000"
+# server_name = "http://vcm-13874.vm.duke.edu:5000"
 
 
 def main_window():
@@ -59,34 +62,50 @@ def main_window():
 
 
 def upload_new_window():
-    def back_button():
-        root.destroy()
+    def upload_button():
+        image_name = image_selection.get()
+        print("You've selected {}".format(image_name))
+        # upload_image(image_name)
         return
 
-    root = Tk()  # sets up main window
-    root.title("Upload New")
-    root.columnconfigure(0, pad=8)
-    root.columnconfigure(1, pad=8)
-    root.columnconfigure(2, pad=8)
+    def back_button():
+        sub_upload.destroy()
+        return
+
+    sub_upload = Tk()  # sets up main window
+    sub_upload.title("Upload New")
+    sub_upload.columnconfigure(0, pad=8)
+    sub_upload.columnconfigure(1, pad=8)
+    sub_upload.columnconfigure(2, pad=8)
 
     # Add main label
-    top_label = ttk.Label(root, text="Upload New")
+    top_label = ttk.Label(sub_upload, text="Upload New")
     top_label.grid(column=0, row=0, columnspan=2, sticky=W)
 
     # Image selection
-    select_label = ttk.Label(root, text="Choose an image:")
+    select_label = ttk.Label(sub_upload, text="Choose an image:")
     select_label.grid(column=0, row=1)
-    image_choice = StringVar()
-    image_entry = ttk.Entry(root, textvariable=image_choice, width=30)
+    image_selection = StringVar()
+    image_entry = ttk.Entry(sub_upload, textvariable=image_selection, width=30)
     image_entry.grid(column=1, row=1)
 
     # Add buttons
-    upload_btn = ttk.Button(root, text="Upload")  # command=upload_button)
+    upload_btn = ttk.Button(sub_upload, text="Upload", command=upload_button)
     upload_btn.grid(column=0, row=6)
-    back_btn = ttk.Button(root, text="Back", command=back_button)
+    back_btn = ttk.Button(sub_upload, text="Back", command=back_button)
     back_btn.grid(column=1, row=6)
 
+    sub_upload.mainloop()
     return
+
+
+def upload_image(image_name):
+    new_image = {"image": image_name}
+    r = requests.post(server_name + "/api/upload_image", json=new_image)
+    if r.status_code != 200:
+        print("Error: {} - {}".format(r.status_code, r.text))
+    else:
+        print("Success: {}".format(r.text))
 
 
 if __name__ == "__main__":

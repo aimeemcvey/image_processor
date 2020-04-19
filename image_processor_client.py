@@ -65,14 +65,16 @@ def upload_new_window():
     def upload_button():
         image_name = image_selection.get()
         print("You've selected {}".format(image_name))
-        # upload_image(image_name)
+        upload_image(image_name)
+        # close window
+        # upload status window
         return
 
     def back_button():
         sub_upload.destroy()
         return
 
-    sub_upload = Tk()  # sets up main window
+    sub_upload = Toplevel()  # sets up main window
     sub_upload.title("Upload New")
     sub_upload.columnconfigure(0, pad=8)
     sub_upload.columnconfigure(1, pad=8)
@@ -95,7 +97,6 @@ def upload_new_window():
     back_btn = ttk.Button(sub_upload, text="Back", command=back_button)
     back_btn.grid(column=1, row=6)
 
-    sub_upload.mainloop()
     return
 
 

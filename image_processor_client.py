@@ -22,6 +22,12 @@ def main_window():
     ttk.Radiobutton(root, text="Download", variable=action,
                     value="download").grid(column=0, row=5, sticky=W)
 
+    # Add buttons
+    ok_btn = ttk.Button(root, text="Ok")   # command=ok_button)
+    ok_btn.grid(column=1, row=6)
+    cancel_btn = ttk.Button(root, text="Cancel")  # command=cancel_button)
+    cancel_btn.grid(column=2, row=6)
+
     root.mainloop()
     return
 

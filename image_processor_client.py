@@ -6,6 +6,9 @@ from tkinter import ttk
 def main_window():
     root = Tk()  # sets up main window
     root.title("Image Processor")
+    root.columnconfigure(0, pad=8)
+    root.columnconfigure(1, pad=8)
+    root.columnconfigure(2, pad=8)
 
     # Add main label
     top_label = ttk.Label(root, text="Image Processor")
@@ -24,7 +27,7 @@ def main_window():
 
     # Add buttons
     ok_btn = ttk.Button(root, text="Ok")   # command=ok_button)
-    ok_btn.grid(column=1, row=6)
+    ok_btn.grid(column=0, row=6, columnspan=2)
     cancel_btn = ttk.Button(root, text="Cancel")  # command=cancel_button)
     cancel_btn.grid(column=2, row=6)
 

@@ -11,6 +11,17 @@ def main_window():
     top_label = ttk.Label(root, text="Image Processor")
     top_label.grid(column=0, row=0, columnspan=2, sticky=W)
 
+    # Add Radiobuttons
+    action = StringVar()
+    ttk.Radiobutton(root, text="Upload", variable=action,
+                    value="upload").grid(column=0, row=2, sticky=W)
+    ttk.Radiobutton(root, text="Invert", variable=action,
+                    value="invert").grid(column=0, row=3, sticky=W)
+    ttk.Radiobutton(root, text="Display", variable=action,
+                    value="display").grid(column=0, row=4, sticky=W)
+    ttk.Radiobutton(root, text="Download", variable=action,
+                    value="download").grid(column=0, row=5, sticky=W)
+
     root.mainloop()
     return
 

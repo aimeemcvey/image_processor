@@ -3,8 +3,18 @@ from flask import Flask, jsonify, request
 import logging
 from datetime import datetime
 import requests
+from pymodm import connect, MongoModel, fields
 
+connect("mongodb+srv://db_access:swim4life@aimeemcv-7rfsl.mongodb.net/imagedb?retryWrites=true&w=majority")
 app = Flask(__name__)
+
+
+class Image(MongoModel):
+    image_name = fields.CharField(primary_key=True)
+    image_formats = fields.ListField(field=fields.DictField())
+    upload_time = fields.DateTimeField
+    image_size = fields.ListField(field=fields.DictField())
+    processed_info = fields.ListField(field=fields.DictField())
 
 
 @app.route("/api/upload_image", methods=["POST"])

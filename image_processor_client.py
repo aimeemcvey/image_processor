@@ -86,14 +86,14 @@ def upload_new_window():
                                             icon="error")
             return
         else:
-            response = upload_image(image_name, b64_str)
-            if response:
+            upload_out = upload_image(image_name, b64_str)
+            if upload_out is True:
                 success_message = "Image uploaded successfully"
                 response = messagebox.showinfo(title="Upload Success",
                                                message=success_message)
             else:
                 response = messagebox.askretrycancel(title="Upload Failure",
-                                                     message=response,
+                                                     message=upload_out,
                                                      icon="error")
         # close window
         return
@@ -144,6 +144,7 @@ def upload_image(image_name, b64_str):
     if r.status_code != 200:
         failure_message = "Image upload failed: {} - {}"\
             .format(r.status_code, r.text)
+        print(r.status_code)
         return failure_message
     else:
         return True

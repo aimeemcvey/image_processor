@@ -69,6 +69,7 @@ def upload_new_window():
     def upload_button():
         image_name = image_selection.get()
         print("You've selected {}".format(image_name))
+        image_entry.delete(0, 'end')
         b64_str = image_file_to_b64("images/{}".format(image_name))
         if b64_str is False:
             # window saying file not found

@@ -6,7 +6,10 @@ import requests
 import base64
 import io
 import matplotlib.image as mpimg
+
 server_name = "http://127.0.0.1:5000"
+
+
 # server_name = "http://vcm-13874.vm.duke.edu:5000"
 
 
@@ -85,7 +88,17 @@ def upload_new_window():
                                             message=not_image_message, icon="error")
             return
         else:
-            upload_image(image_name, b64_str)
+            response = upload_image(image_name, b64_str)
+            # upload status window
+            if response:
+                success_message = "Image uploaded successfully"
+                response = messagebox.showinfo(title="Upload Success",
+                                               message=sucess_message)
+            else:
+                # failure_message
+                response = messagebox.askretrycancel(title="Upload Failure",
+                                                     message=failure_message, icon="error")
+
         # close window
         # upload status window
         return
@@ -135,9 +148,11 @@ def upload_image(image_name, b64_str):
     new_image = {"image": image_name, "b64_string": b64_str}
     r = requests.post(server_name + "/api/upload_image", json=new_image)
     if r.status_code != 200:
-        print("Error: {} - {}".format(r.status_code, r.text))
+        failure_message = "Image upload failed: {} - {}".format(r.status_code, r.text)
+        return failure_message
     else:
-        print("Success: {}".format(r.text))
+        # print("Success: {}".format(r.text))
+        return True
 
 
 if __name__ == "__main__":

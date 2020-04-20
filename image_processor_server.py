@@ -35,8 +35,6 @@ def post_new_image():
     #                .format(in_dict["image_name"]), 400
     b64_str = image_file_to_b64("images/{}".format(in_dict["image"]))
     in_dict["b64_string"] = b64_str
-    nd_array = b64_string_to_ndarray(b64_str)
-    in_dict["nd_array"] = nd_array
     # make sure in right directory - error message
     add_image_to_db(in_dict)
     return "Image added", 200

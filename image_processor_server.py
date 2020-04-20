@@ -60,8 +60,8 @@ def add_image_to_db(in_dict):
     new_image = Image(image_name=in_dict["image"],
                       image_formats={"b64_str": in_dict["b64_string"]},
                       upload_time=timestamp)
-    new_image.save()
-    return True
+    x = new_image.save()
+    return new_image.image_name
 
 
 if __name__ == "__main__":

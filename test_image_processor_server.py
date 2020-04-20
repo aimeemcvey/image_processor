@@ -18,5 +18,5 @@ def test_add_image_to_db():
     from image_processor_server import add_image_to_db
     in_dict = {'image': 'acl1.jpg', 'b64_string': "3lkewar90eq3ljafjdl"}
     answer = add_image_to_db(in_dict)
-    expected = True
+    expected = 'acl1.jpg'
     assert answer == expected

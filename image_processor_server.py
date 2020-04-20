@@ -29,7 +29,6 @@ def post_new_image():
     check_result = verify_image_info(in_dict)
     if check_result is not True:
         return check_result, 400
-    # verify it's actually an image w correct extension and route
     # if is_image_in_database(in_dict["image_name"]) is True:
     #     return "Image {} has already been added to server" \
     #                .format(in_dict["image_name"]), 400

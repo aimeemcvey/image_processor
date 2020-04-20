@@ -47,12 +47,12 @@ def verify_image_info(in_dict):
     return True
 
 
-def b64_string_to_ndarray(b64_string):
-    image_bytes = base64.b64decode(b64_string)
-    image_buf = io.BytesIO(image_bytes)
-    # check jpg and png differences
-    img_ndarray = mpimg.imread(image_buf, format='JPG')
-    return img_ndarray
+# def b64_string_to_ndarray(b64_string):
+#     image_bytes = base64.b64decode(b64_string)
+#     image_buf = io.BytesIO(image_bytes)
+#     # check jpg and png differences
+#     img_ndarray = mpimg.imread(image_buf, format='JPG')
+#     return img_ndarray
 
 
 def add_image_to_db(in_dict):

@@ -7,6 +7,8 @@ from pymodm import connect, MongoModel, fields
 from PIL import Image, ImageTk
 import base64
 import io
+import matplotlib.image as mpimg
+from skimage.io import imsave
 
 connect("mongodb+srv://db_access:swim4life@aimeemcv-7rfsl.mongodb.net/"
         "imagedb?retryWrites=true&w=majority")
@@ -33,6 +35,8 @@ def post_new_image():
     #                .format(in_dict["image_name"]), 400
     b64_str = image_file_to_b64("images/{}".format(in_dict["image"]))
     in_dict["b64_string"] = b64_str
+    nd_array = b64_string_to_ndarray(b64_str)
+    in_dict["nd_array"] = nd_array
     # make sure in right directory - error message
     add_image_to_db(in_dict)
     return "Image added", 200
@@ -55,6 +59,14 @@ def image_file_to_b64(filename):
         b64_bytes = base64.b64encode(image_file.read())
     b64_str = str(b64_bytes, encoding='utf-8')
     return b64_str
+
+
+def b64_string_to_ndarray(b64_string):
+    image_bytes = base64.b64decode(b64_string)
+    image_buf = io.BytesIO(image_bytes)
+    # check jpg and png differences
+    img_ndarray = mpimg.imread(image_buf, format='JPG')
+    return img_ndarray
 
 
 def add_image_to_db(in_dict):

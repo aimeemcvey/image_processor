@@ -8,8 +8,6 @@ import io
 import matplotlib.image as mpimg
 
 server_name = "http://127.0.0.1:5000"
-
-
 # server_name = "http://vcm-13874.vm.duke.edu:5000"
 
 
@@ -93,7 +91,7 @@ def upload_new_window():
                                                message=success_message)
             else:
                 response = messagebox.askretrycancel(title="Upload Failure",
-                                                     message=failure_message, icon="error")
+                                                     message=response, icon="error")
         # close window
         return
 

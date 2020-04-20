@@ -75,13 +75,15 @@ def upload_new_window():
         if b64_str is False:  # file not found
             not_found_message = "{} could not be found.".format(image_name)
             response = messagebox.showerror(title="File Not Found",
-                                            message=not_found_message, icon="error")
+                                            message=not_found_message,
+                                            icon="error")
             return
         elif not b64_str:  # not an image
             not_image_message = "{} is not a supported filetype. " \
                                 "Please select an image.".format(image_name)
             response = messagebox.showerror(title="File Not Supported",
-                                            message=not_image_message, icon="error")
+                                            message=not_image_message,
+                                            icon="error")
             return
         else:
             response = upload_image(image_name, b64_str)
@@ -91,7 +93,8 @@ def upload_new_window():
                                                message=success_message)
             else:
                 response = messagebox.askretrycancel(title="Upload Failure",
-                                                     message=response, icon="error")
+                                                     message=response,
+                                                     icon="error")
         # close window
         return
 
@@ -139,7 +142,8 @@ def upload_image(image_name, b64_str):
     new_image = {"image": image_name, "b64_string": b64_str}
     r = requests.post(server_name + "/api/upload_image", json=new_image)
     if r.status_code != 200:
-        failure_message = "Image upload failed: {} - {}".format(r.status_code, r.text)
+        failure_message = "Image upload failed: {} - {}"\
+            .format(r.status_code, r.text)
         return failure_message
     else:
         return True

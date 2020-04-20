@@ -68,8 +68,13 @@ def upload_new_window():
     def upload_button():
         image_name = image_selection.get()
         print("You've selected {}".format(image_name))
+        # verify it's actually an image w correct extension and route
         b64_str = image_file_to_b64("images/{}".format(image_name))
-        upload_image(image_name, b64_str)
+        if b64_str is False:
+            return "{} could not be found.".format(image_name)
+            # need window saying can't be found
+        else:
+            upload_image(image_name, b64_str)
         # close window
         # upload status window
         return
@@ -106,14 +111,13 @@ def upload_new_window():
 
 def image_file_to_b64(filename):
     # make sure in right directory - error message
-    # verify it's actually an image w correct extension and route
     try:
         with open(filename, "rb") as image_file:
             b64_bytes = base64.b64encode(image_file.read())
         b64_str = str(b64_bytes, encoding='utf-8')
+        return b64_str
     except IOError:
-        return "{} could not be found.".format(filename)
-    return b64_str
+        return False
 
 
 def upload_image(image_name, b64_str):

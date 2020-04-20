@@ -4,6 +4,9 @@ import logging
 from datetime import datetime
 import requests
 from pymodm import connect, MongoModel, fields
+from PIL import Image, ImageTk
+import base64
+import io
 
 connect("mongodb+srv://db_access:swim4life@aimeemcv-7rfsl.mongodb.net/"
         "imagedb?retryWrites=true&w=majority")
@@ -28,7 +31,8 @@ def post_new_image():
     # if is_image_in_database(in_dict["image_name"]) is True:
     #     return "Image {} has already been added to server" \
     #                .format(in_dict["image_name"]), 400
-    image_file_to_b64("images/{}".format(in_dict["image"]))
+    b64_str = image_file_to_b64("images/{}".format(in_dict["image"]))
+    in_dict["b64_string"] = b64_str
     # make sure in right directory - error message
     add_image_to_db(in_dict)
     return "Image added", 200
@@ -46,11 +50,10 @@ def verify_image_info(in_dict):
 
 
 def image_file_to_b64(filename):
+    print(filename)
     with open(filename, "rb") as image_file:
         b64_bytes = base64.b64encode(image_file.read())
     b64_str = str(b64_bytes, encoding='utf-8')
-    in_dict["b64_string"] = b64str
-    print(b64_str)
     return b64_str
 
 

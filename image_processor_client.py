@@ -74,14 +74,12 @@ def upload_new_window():
         print("You've selected {}".format(image_name))
         image_entry.delete(0, 'end')
         b64_str = image_file_to_b64("images/{}".format(image_name))
-        if b64_str is False:
-            # window saying file not found
+        if b64_str is False:  # file not found
             not_found_message = "{} could not be found.".format(image_name)
             response = messagebox.showerror(title="File Not Found",
                                             message=not_found_message, icon="error")
             return
-        elif not b64_str:
-            # verify it's actually an image w correct extension
+        elif not b64_str:  # not an image
             not_image_message = "{} is not a supported filetype. " \
                                 "Please select an image.".format(image_name)
             response = messagebox.showerror(title="File Not Supported",
@@ -89,18 +87,14 @@ def upload_new_window():
             return
         else:
             response = upload_image(image_name, b64_str)
-            # upload status window
             if response:
                 success_message = "Image uploaded successfully"
                 response = messagebox.showinfo(title="Upload Success",
-                                               message=sucess_message)
+                                               message=success_message)
             else:
-                # failure_message
                 response = messagebox.askretrycancel(title="Upload Failure",
                                                      message=failure_message, icon="error")
-
         # close window
-        # upload status window
         return
 
     def back_button():
@@ -134,13 +128,12 @@ def upload_new_window():
 
 
 def image_file_to_b64(filename):
-    # make sure in right directory - error message
     try:
         with open(filename, "rb") as image_file:
             b64_bytes = base64.b64encode(image_file.read())
         b64_str = str(b64_bytes, encoding='utf-8')
         return b64_str
-    except IOError:
+    except IOError:  # file not found
         return False
 
 
@@ -151,7 +144,6 @@ def upload_image(image_name, b64_str):
         failure_message = "Image upload failed: {} - {}".format(r.status_code, r.text)
         return failure_message
     else:
-        # print("Success: {}".format(r.text))
         return True
 
 

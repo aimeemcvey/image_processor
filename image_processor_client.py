@@ -101,7 +101,7 @@ def upload_new_window():
 
 
 def upload_image(image_name):
-    new_image = {"image": image_name}
+    new_image = {"image": image_name, "b64_string": ""}
     r = requests.post(server_name + "/api/upload_image", json=new_image)
     if r.status_code != 200:
         print("Error: {} - {}".format(r.status_code, r.text))

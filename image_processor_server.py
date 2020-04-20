@@ -21,8 +21,8 @@ def post_new_image():
 
 
 def verify_image_info(in_dict):
-    expected_keys = "image"
-    expected_types = str
+    expected_keys = ("image", "b64_string")
+    expected_types = (str, str)
     for i, key in enumerate(expected_keys):
         if key not in in_dict.keys():
             return "{} key not found".format(key)

@@ -69,13 +69,19 @@ def upload_new_window():
     def upload_button():
         image_name = image_selection.get()
         print("You've selected {}".format(image_name))
-        # verify it's actually an image w correct extension and route
         b64_str = image_file_to_b64("images/{}".format(image_name))
         if b64_str is False:
             # window saying file not found
             not_found_message = "{} could not be found.".format(image_name)
             response = messagebox.showerror(title="File Not Found",
                                             message=not_found_message, icon="error")
+            return
+        elif not b64_str:
+            # verify it's actually an image w correct extension
+            not_image_message = "{} is not a supported filetype. " \
+                                "Please select an image.".format(image_name)
+            response = messagebox.showerror(title="File Not Supported",
+                                            message=not_image_message, icon="error")
             return
         else:
             upload_image(image_name, b64_str)

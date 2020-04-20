@@ -4,6 +4,7 @@ import logging
 from datetime import datetime
 import requests
 from pymodm import connect, MongoModel, fields
+from pymodm import errors as pymodm_errors
 from PIL import Image, ImageTk
 import base64
 import io
@@ -29,9 +30,10 @@ def post_new_image():
     check_result = verify_image_info(in_dict)
     if check_result is not True:
         return check_result, 400
-    # if is_image_in_database(in_dict["image_name"]) is True:
-    #     return "Image {} has already been added to server" \
-    #                .format(in_dict["image_name"]), 400
+    if is_image_in_database(in_dict["image"]) is True:
+        print("Already added")
+        return "Image {} has already been added to server" \
+                   .format(in_dict["image"]), 400
     add_image_to_db(in_dict)
     return "Image added", 200
 
@@ -44,6 +46,14 @@ def verify_image_info(in_dict):
             return "{} key not found".format(key)
         if type(in_dict[key]) is not expected_types[i]:
             return "{} value not a string".format(key)
+    return True
+
+
+def is_image_in_database(name):
+    try:
+        db_item = Image.objects.raw({"_id": name})
+    except pymodm_errors.DoesNotExist:
+        return False
     return True
 
 

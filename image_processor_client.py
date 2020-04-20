@@ -2,6 +2,9 @@
 from tkinter import *
 from tkinter import ttk
 import requests
+import base64
+import io
+import matplotlib.image as mpimg
 server_name = "http://127.0.0.1:5000"
 # server_name = "http://vcm-13874.vm.duke.edu:5000"
 
@@ -65,7 +68,13 @@ def upload_new_window():
     def upload_button():
         image_name = image_selection.get()
         print("You've selected {}".format(image_name))
-        upload_image(image_name)
+        # verify it's actually an image w correct extension and route
+        b64_str = image_file_to_b64("images/{}".format(image_name))
+        if b64_str is False:
+            return "{} could not be found.".format(image_name)
+            # need window saying can't be found
+        else:
+            upload_image(image_name, b64_str)
         # close window
         # upload status window
         return
@@ -100,8 +109,19 @@ def upload_new_window():
     return
 
 
-def upload_image(image_name):
-    new_image = {"image": image_name, "b64_string": ""}
+def image_file_to_b64(filename):
+    # make sure in right directory - error message
+    try:
+        with open(filename, "rb") as image_file:
+            b64_bytes = base64.b64encode(image_file.read())
+        b64_str = str(b64_bytes, encoding='utf-8')
+        return b64_str
+    except IOError:
+        return False
+
+
+def upload_image(image_name, b64_str):
+    new_image = {"image": image_name, "b64_string": b64_str}
     r = requests.post(server_name + "/api/upload_image", json=new_image)
     if r.status_code != 200:
         print("Error: {} - {}".format(r.status_code, r.text))

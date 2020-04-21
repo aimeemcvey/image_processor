@@ -21,6 +21,10 @@ def main_window():
         root.destroy()
         return
 
+    def update_list_combobox():
+        image_list = get_image_list()
+        image_choice_box['values'] = image_list
+
     root = Tk()  # sets up main window
     root.title("Image Processor")
     root.columnconfigure(0, pad=8)
@@ -36,10 +40,9 @@ def main_window():
     select_label.grid(column=0, row=1)
 
     image_choice = StringVar()
-    image_choice_box = ttk.Combobox(root, textvariable=image_choice)
+    image_choice_box = ttk.Combobox(root, textvariable=image_choice,
+                                    postcommand=update_list_combobox)
     image_choice_box.grid(column=1, row=1)
-    image_list = get_image_list()
-    image_choice_box['values'] = image_list
     image_choice_box.state(["readonly"])
 
     # Add Radiobuttons
@@ -102,12 +105,12 @@ def upload_new_window():
                                                message=success_message)
                 sub_upload.destroy()
                 image_list = get_image_list()
+                print(image_list)
                 return image_list
             else:
                 response = messagebox.askretrycancel(title="Upload Failure",
                                                      message=upload_out,
                                                      icon="error")
-        # close window
         return
 
     def back_button():

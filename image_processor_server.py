@@ -88,8 +88,8 @@ def post_invert_image():
     check_result = verify_image_name(in_dict)
     if check_result is not True:
         return check_result, 400
-    if is_image_in_database(in_dict["image"]) is True:
-        return "Image {} has already been added to server" \
+    if is_image_in_database(in_dict["image"]) is False:
+        return "Image {} not found in database" \
                    .format(in_dict["image"]), 400
     add_image_to_db(in_dict)
     return "Image inverted", 200

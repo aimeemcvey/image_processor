@@ -42,7 +42,7 @@ def main_window():
             invert_out = invert_image(image_choice.get())
             if invert_out is True:
                 success_message = "Image inverted successfully"
-                messagebox.showinfo(title="Upload Success",
+                messagebox.showinfo(title="Inversion Success",
                                     message=success_message)
             else:
                 messagebox.askretrycancel(title="Inversion Failure",

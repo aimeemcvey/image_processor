@@ -9,6 +9,8 @@ import matplotlib.image as mpimg
 import json
 
 server_name = "http://127.0.0.1:5000"
+
+
 # server_name = "http://vcm-13874.vm.duke.edu:5000"
 
 
@@ -19,6 +21,34 @@ def main_window():
 
     def cancel_button():
         root.destroy()
+        return
+
+    def ok_button():
+        if image_choice.get() == "":
+            no_selection_message = "Please select an image."
+            messagebox.showerror(title="Selection Error",
+                                 message=no_selection_message,
+                                 icon="error")
+            return
+        else:
+            message_out = "You have selected to {} {}.\n" \
+                          "Continue?" \
+                .format(action.get(), image_choice.get())
+            response = messagebox.askyesno(message=message_out,
+                                           icon="question")
+        if response is False:
+            return
+        elif response is True and action.get() == "invert":
+            print("going to invert")
+            invert_out = invert_image(image_choice.get())
+            if invert_out is True:
+                success_message = "Image inverted successfully"
+                messagebox.showinfo(title="Inversion Success",
+                                    message=success_message)
+            else:
+                messagebox.askretrycancel(title="Inversion Failure",
+                                          message=invert_out,
+                                          icon="error")
         return
 
     def update_list_combobox():
@@ -57,7 +87,7 @@ def main_window():
                     value="download").grid(column=1, row=4, sticky=W)
 
     # Add buttons
-    ok_btn = ttk.Button(root, text="Ok")  # command=ok_button)
+    ok_btn = ttk.Button(root, text="Ok", command=ok_button)
     ok_btn.grid(column=0, row=6)
     cancel_btn = ttk.Button(root, text="Cancel", command=cancel_button)
     cancel_btn.grid(column=1, row=6)
@@ -76,6 +106,17 @@ def get_image_list():
         return list_failure_message
     else:
         return json.loads(r.text)
+
+
+def invert_image(image_name):
+    image_to_invert = {"image": image_name}
+    r = requests.post(server_name + "/api/invert_image", json=image_to_invert)
+    if r.status_code != 200:
+        failure_message = "Image inversion failed: {} - {}" \
+            .format(r.status_code, r.text)
+        return failure_message
+    else:
+        return True
 
 
 def upload_new_window():
@@ -154,7 +195,7 @@ def upload_image(image_name, b64_str):
     new_image = {"image": image_name, "b64_string": b64_str}
     r = requests.post(server_name + "/api/upload_image", json=new_image)
     if r.status_code != 200:
-        failure_message = "Image upload failed: {} - {}"\
+        failure_message = "Image upload failed: {} - {}" \
             .format(r.status_code, r.text)
         return failure_message
     else:

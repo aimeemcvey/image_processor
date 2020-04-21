@@ -4,6 +4,7 @@ import logging
 from datetime import datetime
 import requests
 from pymodm import connect, MongoModel, fields
+from pymodm import errors as pymodm_errors
 from PIL import Image, ImageTk
 import base64
 import io
@@ -29,9 +30,9 @@ def post_new_image():
     check_result = verify_image_info(in_dict)
     if check_result is not True:
         return check_result, 400
-    # if is_image_in_database(in_dict["image_name"]) is True:
-    #     return "Image {} has already been added to server" \
-    #                .format(in_dict["image_name"]), 400
+    if is_image_in_database(in_dict["image"]) is True:
+        return "Image {} has already been added to server" \
+                   .format(in_dict["image"]), 400
     add_image_to_db(in_dict)
     return "Image added", 200
 
@@ -47,6 +48,16 @@ def verify_image_info(in_dict):
     return True
 
 
+def is_image_in_database(name):
+    check_db = []
+    db_items = Image.objects.raw({})
+    for item in db_items:
+        check_db.append(item.image_name)
+    if name in check_db:
+        return True
+    return False
+
+
 # def b64_string_to_ndarray(b64_string):
 #     image_bytes = base64.b64decode(b64_string)
 #     image_buf = io.BytesIO(image_bytes)
@@ -60,8 +71,8 @@ def add_image_to_db(in_dict):
     new_image = Image(image_name=in_dict["image"],
                       image_formats={"b64_str": in_dict["b64_string"]},
                       upload_time=timestamp)
-    new_image.save()
-    return True
+    x = new_image.save()
+    return new_image.image_name
 
 
 if __name__ == "__main__":

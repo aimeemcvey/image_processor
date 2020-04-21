@@ -79,7 +79,6 @@ def generate_image_list():
     for item in db_items:
         image_list.append(item.image_name)
     image_list.sort()
-    print(image_list)
     return image_list
 
 

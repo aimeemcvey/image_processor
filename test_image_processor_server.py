@@ -49,3 +49,14 @@ def test_generate_image_list():
     answer = generate_image_list()
     expected = ['acl100.jpg', 'acl200.jpg']
     assert answer == expected
+
+
+@pytest.mark.parametrize("in_dict, expected", [
+    ({"image": "acl100.jpg"}, True),
+    ({"imge": "acl100.jpg"}, "image key not found"),
+    ({"image": 100}, "image value not a string"),
+])
+def test_verify_image_name(in_dict, expected):
+    from image_processor_server import verify_image_name
+    answer = verify_image_name(in_dict)
+    assert answer == expected

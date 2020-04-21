@@ -26,9 +26,10 @@ def main_window():
     def ok_button():
         if image_choice.get() == "":
             no_selection_message = "Please select an image."
-            response = messagebox.showerror(title="Selection Error",
-                                            message=no_selection_message,
-                                            icon="error")
+            messagebox.showerror(title="Selection Error",
+                                 message=no_selection_message,
+                                 icon="error")
+            return
         else:
             message_out = "You have selected to {} {}.\n" \
                           "Continue?" \
@@ -36,6 +37,16 @@ def main_window():
             response = messagebox.askyesno(message=message_out, icon="question")
         if response is False:
             return
+        elif response is True and action.get == "invert":
+            invert_out = invert_image(image_selection.get())
+            if invert_out is True:
+                success_message = "Image inverted successfully"
+                messagebox.showinfo(title="Upload Success",
+                                    message=success_message)
+            else:
+                messagebox.askretrycancel(title="Inversion Failure",
+                                          message=invert_out,
+                                          icon="error")
         return
 
     def update_list_combobox():
@@ -93,6 +104,17 @@ def get_image_list():
         return list_failure_message
     else:
         return json.loads(r.text)
+
+
+def invert_image(image_name):
+    image_to_invert = {"image": image_name}
+    r = requests.post(server_name + "/api/upload_image", json=image_to_invert)
+    if r.status_code != 200:
+        failure_message = "Image inversion failed: {} - {}" \
+            .format(r.status_code, r.text)
+        return failure_message
+    else:
+        return True
 
 
 def upload_new_window():

@@ -91,7 +91,7 @@ def post_invert_image():
     if is_image_in_database(in_dict["image"]) is False:
         return "Image {} not found in database" \
                    .format(in_dict["image"]), 400
-    add_image_to_db(in_dict)
+    process_image_inversion(in_dict)
     return "Image inverted", 200
 
 
@@ -102,6 +102,10 @@ def verify_image_name(in_dict):
         return "{} key not found".format(expected_key)
     if type(expected_key) is not expected_type:
         return "{} value not a string".format(expected_key)
+    return True
+
+
+def process_image_inversion(in_dict):
     return True
 
 

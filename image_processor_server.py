@@ -82,6 +82,19 @@ def generate_image_list():
     return image_list
 
 
+@app.route("/api/invert_image", methods=["POST"])
+def post_invert_image():
+    in_dict = request.get_json()
+    check_result = verify_image_name(in_dict)
+    if check_result is not True:
+        return check_result, 400
+    if is_image_in_database(in_dict["image"]) is True:
+        return "Image {} has already been added to server" \
+                   .format(in_dict["image"]), 400
+    add_image_to_db(in_dict)
+    return "Image inverted", 200
+
+
 # def b64_string_to_ndarray(b64_string):
 #     image_bytes = base64.b64decode(b64_string)
 #     image_buf = io.BytesIO(image_bytes)

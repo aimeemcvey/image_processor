@@ -70,10 +70,8 @@ def get_image_list():
     if r.status_code != 200:
         list_failure_message = "Failed to acquire image list: {} - {}" \
             .format(r.status_code, r.text)
-        print(r.status_code)
         return list_failure_message
     else:
-        print(json.loads(r.text))
         return json.loads(r.text)
 
 
@@ -102,6 +100,9 @@ def upload_new_window():
                 success_message = "Image uploaded successfully"
                 response = messagebox.showinfo(title="Upload Success",
                                                message=success_message)
+                sub_upload.destroy()
+                image_list = get_image_list()
+                return image_list
             else:
                 response = messagebox.askretrycancel(title="Upload Failure",
                                                      message=upload_out,
@@ -155,7 +156,6 @@ def upload_image(image_name, b64_str):
     if r.status_code != 200:
         failure_message = "Image upload failed: {} - {}"\
             .format(r.status_code, r.text)
-        print(r.status_code)
         return failure_message
     else:
         return True

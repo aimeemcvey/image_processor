@@ -95,6 +95,16 @@ def post_invert_image():
     return "Image inverted", 200
 
 
+def verify_image_name(in_dict):
+    expected_key = "image"
+    expected_type = str
+    if expected_key not in in_dict.keys():
+        return "{} key not found".format(expected_key)
+    if type(expected_key) is not expected_type:
+        return "{} value not a string".format(expected_key)
+    return True
+
+
 # def b64_string_to_ndarray(b64_string):
 #     image_bytes = base64.b64decode(b64_string)
 #     image_buf = io.BytesIO(image_bytes)

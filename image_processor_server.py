@@ -31,7 +31,6 @@ def post_new_image():
     if check_result is not True:
         return check_result, 400
     if is_image_in_database(in_dict["image"]) is True:
-        print("Already added")
         return "Image {} has already been added to server" \
                    .format(in_dict["image"]), 400
     add_image_to_db(in_dict)
@@ -50,11 +49,13 @@ def verify_image_info(in_dict):
 
 
 def is_image_in_database(name):
-    try:
-        db_item = Image.objects.raw({"_id": name})
-    except pymodm_errors.DoesNotExist:
-        return False
-    return True
+    check_db = []
+    db_items = Image.objects.raw({})
+    for item in db_items:
+        check_db.append(item.image_name)
+    if name in check_db:
+        return True
+    return False
 
 
 # def b64_string_to_ndarray(b64_string):

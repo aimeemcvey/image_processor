@@ -69,13 +69,17 @@ def add_image_to_db(in_dict):
 
 @app.route("/api/image_list", methods=["GET"])
 def get_image_list_from_db():
-    answer = generate_all_hr(check_result)
-    if answer is False:
-        return "Unknown Error", 400
-    elif type(answer) is str:
-        return answer, 400
-    else:
-        return jsonify(answer), 200
+    im_list = generate_image_list()
+    return jsonify(im_list), 200
+
+
+def generate_image_list():
+    image_list = []  # if no images in db, list will be empty
+    db_items = Image.objects.raw({})
+    for item in db_items:
+        image_list.append(item.image_name)
+    print(image_list)
+    return image_list
 
 
 # def b64_string_to_ndarray(b64_string):

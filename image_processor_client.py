@@ -37,8 +37,9 @@ def main_window():
             response = messagebox.askyesno(message=message_out, icon="question")
         if response is False:
             return
-        elif response is True and action.get == "invert":
-            invert_out = invert_image(image_selection.get())
+        elif response is True and action.get() == "invert":
+            print("going to invert")
+            invert_out = invert_image(image_choice.get())
             if invert_out is True:
                 success_message = "Image inverted successfully"
                 messagebox.showinfo(title="Upload Success",
@@ -108,7 +109,7 @@ def get_image_list():
 
 def invert_image(image_name):
     image_to_invert = {"image": image_name}
-    r = requests.post(server_name + "/api/upload_image", json=image_to_invert)
+    r = requests.post(server_name + "/api/invert_image", json=image_to_invert)
     if r.status_code != 200:
         failure_message = "Image inversion failed: {} - {}" \
             .format(r.status_code, r.text)

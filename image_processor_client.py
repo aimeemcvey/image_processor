@@ -21,6 +21,15 @@ def main_window():
         root.destroy()
         return
 
+    def ok_button():
+        message_out = "You have selected to {} {}.\n" \
+                      "Continue?" \
+            .format(action.get(), image_choice.get())
+        response = messagebox.askyesno(message=message_out, icon="question")
+        if response is False:
+            return
+        return
+
     def update_list_combobox():
         image_list = get_image_list()
         image_choice_box['values'] = image_list
@@ -57,7 +66,7 @@ def main_window():
                     value="download").grid(column=1, row=4, sticky=W)
 
     # Add buttons
-    ok_btn = ttk.Button(root, text="Ok")  # command=ok_button)
+    ok_btn = ttk.Button(root, text="Ok", command=ok_button)
     ok_btn.grid(column=0, row=6)
     cancel_btn = ttk.Button(root, text="Cancel", command=cancel_button)
     cancel_btn.grid(column=1, row=6)

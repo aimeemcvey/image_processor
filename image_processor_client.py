@@ -37,6 +37,7 @@ def main_window():
     image_choice = StringVar()
     image_choice_box = ttk.Combobox(root, textvariable=image_choice)
     image_choice_box.grid(column=1, row=1)
+    image_list = get_image_list()
     image_choice_box['values'] = ("acl1.jpg", "acl2.jpg", "esophagus1.jpg",
                                   "esophagus2.jpg", "synpic50411.jpg",
                                   "synpic51041.jpg", "synpic51042.jpg",
@@ -64,6 +65,17 @@ def main_window():
 
     root.mainloop()
     return
+
+
+def get_image_list():
+    r = requests.get(server_name + "/api/image_list")
+    if r.status_code != 200:
+        list_failure_message = "Failed to acquire image list: {} - {}" \
+            .format(r.status_code, r.text)
+        print(r.status_code)
+        return list_failure_message
+    else:
+        return True
 
 
 def upload_new_window():

@@ -58,14 +58,6 @@ def is_image_in_database(name):
     return False
 
 
-# def b64_string_to_ndarray(b64_string):
-#     image_bytes = base64.b64decode(b64_string)
-#     image_buf = io.BytesIO(image_bytes)
-#     # check jpg and png differences
-#     img_ndarray = mpimg.imread(image_buf, format='JPG')
-#     return img_ndarray
-
-
 def add_image_to_db(in_dict):
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     new_image = Image(image_name=in_dict["image"],
@@ -73,6 +65,29 @@ def add_image_to_db(in_dict):
                       upload_time=timestamp)
     x = new_image.save()
     return new_image.image_name
+
+
+@app.route("/api/image_list", methods=["GET"])
+def get_image_list_from_db():
+    im_list = generate_image_list()
+    return jsonify(im_list), 200
+
+
+def generate_image_list():
+    image_list = []  # if no images in db, list will be empty
+    db_items = Image.objects.raw({})
+    for item in db_items:
+        image_list.append(item.image_name)
+    image_list.sort()
+    return image_list
+
+
+# def b64_string_to_ndarray(b64_string):
+#     image_bytes = base64.b64decode(b64_string)
+#     image_buf = io.BytesIO(image_bytes)
+#     # check jpg and png differences
+#     img_ndarray = mpimg.imread(image_buf, format='JPG')
+#     return img_ndarray
 
 
 if __name__ == "__main__":

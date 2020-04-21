@@ -6,6 +6,7 @@ import requests
 import base64
 import io
 import matplotlib.image as mpimg
+import json
 
 server_name = "http://127.0.0.1:5000"
 # server_name = "http://vcm-13874.vm.duke.edu:5000"
@@ -19,6 +20,10 @@ def main_window():
     def cancel_button():
         root.destroy()
         return
+
+    def update_list_combobox():
+        image_list = get_image_list()
+        image_choice_box['values'] = image_list
 
     root = Tk()  # sets up main window
     root.title("Image Processor")
@@ -35,12 +40,9 @@ def main_window():
     select_label.grid(column=0, row=1)
 
     image_choice = StringVar()
-    image_choice_box = ttk.Combobox(root, textvariable=image_choice)
+    image_choice_box = ttk.Combobox(root, textvariable=image_choice,
+                                    postcommand=update_list_combobox)
     image_choice_box.grid(column=1, row=1)
-    image_choice_box['values'] = ("acl1.jpg", "acl2.jpg", "esophagus1.jpg",
-                                  "esophagus2.jpg", "synpic50411.jpg",
-                                  "synpic51041.jpg", "synpic51042.jpg",
-                                  "upj1.jpg", "upj2.jpg")
     image_choice_box.state(["readonly"])
 
     # Add Radiobuttons
@@ -64,6 +66,16 @@ def main_window():
 
     root.mainloop()
     return
+
+
+def get_image_list():
+    r = requests.get(server_name + "/api/image_list")
+    if r.status_code != 200:
+        list_failure_message = "Failed to acquire image list: {} - {}" \
+            .format(r.status_code, r.text)
+        return list_failure_message
+    else:
+        return json.loads(r.text)
 
 
 def upload_new_window():
@@ -91,11 +103,11 @@ def upload_new_window():
                 success_message = "Image uploaded successfully"
                 response = messagebox.showinfo(title="Upload Success",
                                                message=success_message)
+                sub_upload.destroy()
             else:
                 response = messagebox.askretrycancel(title="Upload Failure",
                                                      message=upload_out,
                                                      icon="error")
-        # close window
         return
 
     def back_button():
@@ -144,7 +156,6 @@ def upload_image(image_name, b64_str):
     if r.status_code != 200:
         failure_message = "Image upload failed: {} - {}"\
             .format(r.status_code, r.text)
-        print(r.status_code)
         return failure_message
     else:
         return True

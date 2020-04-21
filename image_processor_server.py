@@ -58,14 +58,6 @@ def is_image_in_database(name):
     return False
 
 
-# def b64_string_to_ndarray(b64_string):
-#     image_bytes = base64.b64decode(b64_string)
-#     image_buf = io.BytesIO(image_bytes)
-#     # check jpg and png differences
-#     img_ndarray = mpimg.imread(image_buf, format='JPG')
-#     return img_ndarray
-
-
 def add_image_to_db(in_dict):
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     new_image = Image(image_name=in_dict["image"],
@@ -73,6 +65,25 @@ def add_image_to_db(in_dict):
                       upload_time=timestamp)
     x = new_image.save()
     return new_image.image_name
+
+
+@app.route("/api/image_list", methods=["GET"])
+def get_image_list_from_db():
+    answer = generate_all_hr(check_result)
+    if answer is False:
+        return "Unknown Error", 400
+    elif type(answer) is str:
+        return answer, 400
+    else:
+        return jsonify(answer), 200
+
+
+# def b64_string_to_ndarray(b64_string):
+#     image_bytes = base64.b64decode(b64_string)
+#     image_buf = io.BytesIO(image_bytes)
+#     # check jpg and png differences
+#     img_ndarray = mpimg.imread(image_buf, format='JPG')
+#     return img_ndarray
 
 
 if __name__ == "__main__":

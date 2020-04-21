@@ -9,6 +9,8 @@ import matplotlib.image as mpimg
 import json
 
 server_name = "http://127.0.0.1:5000"
+
+
 # server_name = "http://vcm-13874.vm.duke.edu:5000"
 
 
@@ -22,10 +24,16 @@ def main_window():
         return
 
     def ok_button():
-        message_out = "You have selected to {} {}.\n" \
-                      "Continue?" \
-            .format(action.get(), image_choice.get())
-        response = messagebox.askyesno(message=message_out, icon="question")
+        if image_choice.get() == "":
+            no_selection_message = "Please select an image."
+            response = messagebox.showerror(title="Selection Error",
+                                            message=no_selection_message,
+                                            icon="error")
+        else:
+            message_out = "You have selected to {} {}.\n" \
+                          "Continue?" \
+                .format(action.get(), image_choice.get())
+            response = messagebox.askyesno(message=message_out, icon="question")
         if response is False:
             return
         return
@@ -163,7 +171,7 @@ def upload_image(image_name, b64_str):
     new_image = {"image": image_name, "b64_string": b64_str}
     r = requests.post(server_name + "/api/upload_image", json=new_image)
     if r.status_code != 200:
-        failure_message = "Image upload failed: {} - {}"\
+        failure_message = "Image upload failed: {} - {}" \
             .format(r.status_code, r.text)
         return failure_message
     else:

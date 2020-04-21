@@ -104,9 +104,6 @@ def upload_new_window():
                 response = messagebox.showinfo(title="Upload Success",
                                                message=success_message)
                 sub_upload.destroy()
-                image_list = get_image_list()
-                print(image_list)
-                return image_list
             else:
                 response = messagebox.askretrycancel(title="Upload Failure",
                                                      message=upload_out,

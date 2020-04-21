@@ -100,7 +100,7 @@ def verify_image_name(in_dict):
     expected_type = str
     if expected_key not in in_dict.keys():
         return "{} key not found".format(expected_key)
-    if type(expected_key) is not expected_type:
+    if type(in_dict[expected_key]) is not expected_type:
         return "{} value not a string".format(expected_key)
     return True
 

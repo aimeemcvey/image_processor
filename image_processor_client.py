@@ -6,6 +6,7 @@ import requests
 import base64
 import io
 import matplotlib.image as mpimg
+import json
 
 server_name = "http://127.0.0.1:5000"
 # server_name = "http://vcm-13874.vm.duke.edu:5000"
@@ -38,10 +39,7 @@ def main_window():
     image_choice_box = ttk.Combobox(root, textvariable=image_choice)
     image_choice_box.grid(column=1, row=1)
     image_list = get_image_list()
-    image_choice_box['values'] = ("acl1.jpg", "acl2.jpg", "esophagus1.jpg",
-                                  "esophagus2.jpg", "synpic50411.jpg",
-                                  "synpic51041.jpg", "synpic51042.jpg",
-                                  "upj1.jpg", "upj2.jpg")
+    image_choice_box['values'] = image_list
     image_choice_box.state(["readonly"])
 
     # Add Radiobuttons
@@ -75,7 +73,8 @@ def get_image_list():
         print(r.status_code)
         return list_failure_message
     else:
-        return True
+        print(json.loads(r.text))
+        return json.loads(r.text)
 
 
 def upload_new_window():

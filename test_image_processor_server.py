@@ -34,3 +34,18 @@ def test_add_image_to_db():
     answer = add_image_to_db(in_dict)
     expected = 'acl100.jpg'
     assert answer == expected
+
+
+def test_add_image_to_db_another():
+    from image_processor_server import add_image_to_db
+    in_dict = {'image': 'acl200.jpg', 'b64_string': "8dasfdljk324098dsajl"}
+    answer = add_image_to_db(in_dict)
+    expected = 'acl200.jpg'
+    assert answer == expected
+
+
+def test_generate_image_list():
+    from image_processor_server import generate_image_list
+    answer = generate_image_list()
+    expected = ['acl100.jpg', 'acl200.jpg']
+    assert answer == expected

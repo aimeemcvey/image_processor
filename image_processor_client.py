@@ -34,7 +34,8 @@ def main_window():
             message_out = "You have selected to {} {}.\n" \
                           "Continue?" \
                 .format(action.get(), image_choice.get())
-            response = messagebox.askyesno(message=message_out, icon="question")
+            response = messagebox.askyesno(message=message_out,
+                                           icon="question")
         if response is False:
             return
         elif response is True and action.get() == "invert":

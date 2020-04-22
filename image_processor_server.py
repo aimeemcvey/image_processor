@@ -92,7 +92,10 @@ def post_invert_image():
     if is_image_in_database(in_dict["image"]) is False:
         return "Image {} not found in database" \
                    .format(in_dict["image"]), 400
-    process_image_inversion(in_dict)
+    b64_str_to_invert = locate_b64_string(in_dict)
+    ndarray_to_invert = b64_string_to_ndarray(b64_str_to_invert)
+    inverted_nd = process_image_inversion(ndarray_to_invert)
+    inverted_b64 = ndarray_to_b64_string(inverted_nd)
     return "Image inverted", 200
 
 
@@ -106,16 +109,13 @@ def verify_image_name(in_dict):
     return True
 
 
-def process_image_inversion(in_dict):
+def locate_b64_string(in_dict):
     print(in_dict["image"])
     to_invert = Image.objects.raw({"_id": in_dict["image"]})
     for doc in to_invert:
         format_dict = doc.image_formats
         b64_str_to_invert = format_dict["b64_str"]
-    ndarray_to_invert = b64_string_to_ndarray(b64_str_to_invert)
-    inverted_nd = util.invert(ndarray_to_invert)
-    inverted_b64 = ndarray_to_b64_string(inverted_nd)
-    return True
+    return b64_str_to_invert
 
 
 def b64_string_to_ndarray(b64_string):
@@ -124,6 +124,11 @@ def b64_string_to_ndarray(b64_string):
     # check jpg and png differences
     img_ndarray = mpimg.imread(image_buf, format='JPG')
     return img_ndarray
+
+
+def process_image_inversion(ndarray):
+    inverted_nd = util.invert(ndarray)
+    return inverted_nd
 
 
 def ndarray_to_b64_string(img_ndarray):

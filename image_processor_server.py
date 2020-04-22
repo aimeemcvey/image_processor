@@ -10,6 +10,7 @@ import base64
 import io
 import matplotlib.image as mpimg
 from skimage.io import imsave
+from skimage import util
 
 connect("mongodb+srv://db_access:swim4life@aimeemcv-7rfsl.mongodb.net/"
         "imagedb?retryWrites=true&w=majority")
@@ -112,6 +113,7 @@ def process_image_inversion(in_dict):
         format_dict = doc.image_formats
         b64_str_to_invert = format_dict["b64_str"]
     ndarray_to_invert = b64_string_to_ndarray(b64_str_to_invert)
+    inverted_image = util.invert(ndarray_to_invert)
     return True
 
 

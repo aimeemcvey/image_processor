@@ -106,6 +106,12 @@ def verify_image_name(in_dict):
 
 
 def process_image_inversion(in_dict):
+    print(in_dict["image"])
+    to_invert = Image.objects.raw({"_id": in_dict["image"]})
+    for doc in to_invert:
+        format_dict = doc.image_formats
+        b64_str_to_invert = format_dict["b64_str"]
+        print(b64_str_to_invert)
     return True
 
 

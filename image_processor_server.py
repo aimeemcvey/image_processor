@@ -96,7 +96,7 @@ def post_invert_image():
     ndarray_to_invert = b64_string_to_ndarray(b64_str_to_invert)
     inverted_nd = process_image_inversion(ndarray_to_invert)
     inverted_b64 = ndarray_to_b64_string(inverted_nd)
-    return "Image inverted", 200
+    return inverted_b64, 200
 
 
 def verify_image_name(in_dict):

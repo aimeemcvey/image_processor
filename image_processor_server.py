@@ -9,7 +9,9 @@ from PIL import Image, ImageTk
 import base64
 import io
 import matplotlib.image as mpimg
+from matplotlib import pyplot as plt
 from skimage.io import imsave
+from skimage import util
 
 connect("mongodb+srv://db_access:swim4life@aimeemcv-7rfsl.mongodb.net/"
         "imagedb?retryWrites=true&w=majority")
@@ -91,8 +93,11 @@ def post_invert_image():
     if is_image_in_database(in_dict["image"]) is False:
         return "Image {} not found in database" \
                    .format(in_dict["image"]), 400
-    process_image_inversion(in_dict)
-    return "Image inverted", 200
+    b64_str_to_invert = locate_b64_string(in_dict)
+    ndarray_to_invert = b64_string_to_ndarray(b64_str_to_invert)
+    inverted_nd = process_image_inversion(ndarray_to_invert)
+    inverted_b64 = ndarray_to_b64_string(inverted_nd)
+    return inverted_b64, 200
 
 
 def verify_image_name(in_dict):
@@ -105,16 +110,38 @@ def verify_image_name(in_dict):
     return True
 
 
-def process_image_inversion(in_dict):
-    return True
+def locate_b64_string(in_dict):
+    print(in_dict["image"])
+    to_invert = Image.objects.raw({"_id": in_dict["image"]})
+    for doc in to_invert:
+        format_dict = doc.image_formats
+        b64_str_to_invert = format_dict["b64_str"]
+    return b64_str_to_invert
 
 
-# def b64_string_to_ndarray(b64_string):
-#     image_bytes = base64.b64decode(b64_string)
-#     image_buf = io.BytesIO(image_bytes)
-#     # check jpg and png differences
-#     img_ndarray = mpimg.imread(image_buf, format='JPG')
-#     return img_ndarray
+def b64_string_to_ndarray(b64_string):
+    image_bytes = base64.b64decode(b64_string)
+    image_buf = io.BytesIO(image_bytes)
+    # check jpg and png differences
+    img_ndarray = mpimg.imread(image_buf, format='JPG')
+    # plt.imshow(img_ndarray, interpolation="nearest")
+    # plt.show()
+    return img_ndarray
+
+
+def process_image_inversion(ndarray):
+    inverted_nd = util.invert(ndarray)
+    # plt.imshow(inverted_nd, interpolation="nearest")
+    # plt.show()
+    return inverted_nd
+
+
+def ndarray_to_b64_string(img_ndarray):
+    f = io.BytesIO()
+    imsave(f, img_ndarray, plugin='pil')
+    y = base64.b64encode(f.getvalue())
+    b64_string = str(y, encoding='utf-8')
+    return b64_string
 
 
 if __name__ == "__main__":

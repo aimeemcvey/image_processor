@@ -60,3 +60,52 @@ def test_verify_image_name(in_dict, expected):
     from image_processor_server import verify_image_name
     answer = verify_image_name(in_dict)
     assert answer == expected
+
+
+def test_locate_b64_string():
+    from image_processor_server import locate_b64_string
+    in_dict = {'image': 'acl100.jpg'}
+    answer = locate_b64_string(in_dict)
+    expected = "3lkewar90eq3ljafjdl"
+    assert answer == expected
+
+
+def test_b64_string_to_ndarray():
+    from image_processor_client import image_file_to_b64
+    from image_processor_server import b64_string_to_ndarray
+    b64 = image_file_to_b64("images/acl1_test.jpg")
+    nd = b64_string_to_ndarray(b64)
+    answer = nd[25][0:5]
+    expected = [[5, 5, 5],
+                [5, 5, 5],
+                [5, 5, 5],
+                [5, 5, 5],
+                [5, 5, 5]]
+    assert (answer == expected).all
+
+
+def test_process_image_inversion():
+    from image_processor_client import image_file_to_b64
+    from image_processor_server import b64_string_to_ndarray
+    from image_processor_server import process_image_inversion
+    b64 = image_file_to_b64("images/acl1_test.jpg")
+    nd = b64_string_to_ndarray(b64)
+    inverted_nd = process_image_inversion(nd)
+    answer = inverted_nd[25][0:5]
+    expected = [[5, 5, 5],
+                [5, 5, 5],
+                [5, 5, 5],
+                [5, 5, 5],
+                [5, 5, 5]]
+    assert (answer == expected).all
+
+
+def test_ndarray_to_b64_string():
+    from image_processor_client import image_file_to_b64
+    from image_processor_server import b64_string_to_ndarray
+    from image_processor_server import ndarray_to_b64_string
+    b64 = image_file_to_b64("images/acl2_test.jpg")
+    nd = b64_string_to_ndarray(b64)
+    answer = ndarray_to_b64_string(nd)
+    expected = 'iVBORw0KGgoAAAANSUhE'
+    assert answer[0:20] == expected

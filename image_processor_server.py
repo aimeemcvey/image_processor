@@ -9,6 +9,7 @@ from PIL import Image, ImageTk
 import base64
 import io
 import matplotlib.image as mpimg
+from matplotlib import pyplot as plt
 from skimage.io import imsave
 from skimage import util
 
@@ -123,11 +124,15 @@ def b64_string_to_ndarray(b64_string):
     image_buf = io.BytesIO(image_bytes)
     # check jpg and png differences
     img_ndarray = mpimg.imread(image_buf, format='JPG')
+    plt.imshow(img_ndarray, interpolation="nearest")
+    plt.show()
     return img_ndarray
 
 
 def process_image_inversion(ndarray):
     inverted_nd = util.invert(ndarray)
+    plt.imshow(inverted_nd, interpolation="nearest")
+    plt.show()
     return inverted_nd
 
 

@@ -22,6 +22,7 @@ class Image(MongoModel):
     image_name = fields.CharField(primary_key=True)
     image_formats = fields.DictField()
     upload_time = fields.CharField()
+    processing_time = fields.CharField()
     # image_size = fields.ListField()
     # processed_info = fields.ListField()
 
@@ -55,6 +56,7 @@ def is_image_in_database(name):
     db_items = Image.objects.raw({})
     for item in db_items:
         check_db.append(item.image_name)
+        # try except to see if processed image exists
     if name in check_db:
         return True
     return False

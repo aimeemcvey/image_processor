@@ -84,11 +84,20 @@ def test_b64_string_to_ndarray():
     assert (answer == expected).all
 
 
-#
-#
-# def process_image_inversion(ndarray):
-#     inverted_nd = util.invert(ndarray)
-#     return inverted_nd
+def test_process_image_inversion():
+    from image_processor_client import image_file_to_b64
+    from image_processor_server import b64_string_to_ndarray
+    from image_processor_server import process_image_inversion
+    b64 = image_file_to_b64("images/acl1_test.jpg")
+    nd = b64_string_to_ndarray(b64)
+    inverted_nd = process_image_inversion(nd)
+    answer = inverted_nd[25][0:5]
+    expected = [[5, 5, 5],
+                [5, 5, 5],
+                [5, 5, 5],
+                [5, 5, 5],
+                [5, 5, 5]]
+    assert (answer == expected).all
 #
 #
 # def ndarray_to_b64_string(img_ndarray):

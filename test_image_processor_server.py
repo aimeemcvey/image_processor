@@ -60,3 +60,33 @@ def test_verify_image_name(in_dict, expected):
     from image_processor_server import verify_image_name
     answer = verify_image_name(in_dict)
     assert answer == expected
+
+
+def test_locate_b64_string():
+    from image_processor_server import locate_b64_string
+    in_dict = {'image': 'acl100.jpg'}
+    answer = locate_b64_string(in_dict)
+    expected = "3lkewar90eq3ljafjdl"
+    assert answer == expected
+
+#
+#
+# def b64_string_to_ndarray(b64_string):
+#     image_bytes = base64.b64decode(b64_string)
+#     image_buf = io.BytesIO(image_bytes)
+#     # check jpg and png differences
+#     img_ndarray = mpimg.imread(image_buf, format='JPG')
+#     return img_ndarray
+#
+#
+# def process_image_inversion(ndarray):
+#     inverted_nd = util.invert(ndarray)
+#     return inverted_nd
+#
+#
+# def ndarray_to_b64_string(img_ndarray):
+#     f = io.BytesIO()
+#     imsave(f, img_ndarray, plugin='pil')
+#     y = base64.b64encode(f.getvalue())
+#     b64_string = str(y, encoding='utf-8')
+#     return b64_string

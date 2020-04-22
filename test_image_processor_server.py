@@ -98,11 +98,15 @@ def test_process_image_inversion():
                 [5, 5, 5],
                 [5, 5, 5]]
     assert (answer == expected).all
-#
-#
-# def ndarray_to_b64_string(img_ndarray):
-#     f = io.BytesIO()
-#     imsave(f, img_ndarray, plugin='pil')
-#     y = base64.b64encode(f.getvalue())
-#     b64_string = str(y, encoding='utf-8')
-#     return b64_string
+
+
+def test_ndarray_to_b64_string():
+    from image_processor_client import image_file_to_b64
+    from image_processor_server import b64_string_to_ndarray
+    from image_processor_server import ndarray_to_b64_string
+    b64 = image_file_to_b64("images/acl2_test.jpg")
+    nd = b64_string_to_ndarray(b64)
+    answer = ndarray_to_b64_string(nd)
+    expected = 'iVBORw0KGgoAAAANSUhE'
+    assert answer[0:20] == expected
+

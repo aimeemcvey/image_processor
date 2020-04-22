@@ -111,16 +111,16 @@ def process_image_inversion(in_dict):
     for doc in to_invert:
         format_dict = doc.image_formats
         b64_str_to_invert = format_dict["b64_str"]
-        print(b64_str_to_invert)
+    ndarray_to_invert = b64_string_to_ndarray(b64_str_to_invert)
     return True
 
 
-# def b64_string_to_ndarray(b64_string):
-#     image_bytes = base64.b64decode(b64_string)
-#     image_buf = io.BytesIO(image_bytes)
-#     # check jpg and png differences
-#     img_ndarray = mpimg.imread(image_buf, format='JPG')
-#     return img_ndarray
+def b64_string_to_ndarray(b64_string):
+    image_bytes = base64.b64decode(b64_string)
+    image_buf = io.BytesIO(image_bytes)
+    # check jpg and png differences
+    img_ndarray = mpimg.imread(image_buf, format='JPG')
+    return img_ndarray
 
 
 if __name__ == "__main__":

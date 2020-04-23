@@ -5,7 +5,6 @@ from datetime import datetime
 import requests
 from pymodm import connect, MongoModel, fields
 from pymodm import errors as pymodm_errors
-from PIL import Image, ImageTk
 import base64
 import io
 import matplotlib.image as mpimg
@@ -22,7 +21,7 @@ class Image(MongoModel):
     image_name = fields.CharField(primary_key=True)
     image_formats = fields.DictField()
     upload_time = fields.CharField()
-    processing_time = fields.CharField()
+    processed_time = fields.CharField()
     # image_size = fields.ListField()
     # processed_info = fields.ListField()
 
@@ -99,6 +98,7 @@ def post_invert_image():
     ndarray_to_invert = b64_string_to_ndarray(b64_str_to_invert)
     inverted_nd = process_image_inversion(ndarray_to_invert)
     inverted_b64 = ndarray_to_b64_string(inverted_nd)
+    add_inverted_image_to_db(inverted_b64, in_dict["image"])
     return inverted_b64, 200
 
 
@@ -144,6 +144,14 @@ def ndarray_to_b64_string(img_ndarray):
     y = base64.b64encode(f.getvalue())
     b64_string = str(y, encoding='utf-8')
     return b64_string
+
+
+def add_inverted_image_to_db(b64_str, name):
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    update_image = Image.update({"_id": name},
+                                {$set : {"processed_time": timestamp}})
+    x = update_image.save()
+    return update_image.image_name
 
 
 if __name__ == "__main__":

@@ -80,6 +80,10 @@ def generate_image_list():
     db_items = Image.objects.raw({})
     for item in db_items:
         image_list.append(item.image_name)
+        if is_inverted_in_database(item.image_name) is True:
+            stem, ext = item.image_name.split('.')
+            inverted_name = stem + "_inverted." + ext
+            image_list.append(inverted_name)
     image_list.sort()
     return image_list
 
@@ -116,6 +120,7 @@ def verify_image_name(in_dict):
 
 def is_inverted_in_database(name):
     db_item = Image.objects.raw({"_id": name})
+    pt = None
     for item in db_item:
         pt = item.processed_time
     if pt is None:
@@ -123,12 +128,14 @@ def is_inverted_in_database(name):
     return True
 
 
-def locate_b64_string(im_name):
-    print(im_name)
+def locate_b64_string(im_name, which="orig"):
     to_act = Image.objects.raw({"_id": im_name})
     for doc in to_act:
         format_dict = doc.image_formats
-        b64_str_to_use = format_dict["b64_str"]
+        if which is "orig":
+            b64_str_to_use = format_dict["b64_str"]
+        elif which is "inverted":
+            b64_str_to_use = format_dict["inverted_b64_str"]
     return b64_str_to_use
 
 
@@ -169,11 +176,27 @@ def add_inverted_image_to_db(b64_str, name):
 
 @app.route("/api/fetch_b64/<image_name>", methods=["GET"])
 def get_b64_from_db(image_name):
+    status = "og"
+    if "inverted" in image_name:
+        image_name = return_name(image_name)
+        status = "inv"
     check_result = verify_name_input(image_name)
     if check_result is not True:
         return check_result, 400
-    b64_to_disp = locate_b64_string(image_name)
+    if status is "inv":
+        b64_to_disp = locate_b64_string(image_name, "inverted")
+    else:
+        b64_to_disp = locate_b64_string(image_name)
+        print("this image is not")
     return jsonify(b64_to_disp), 200
+
+
+def return_name(image_name):
+    print("this image is inverted")
+    whole_stem, ext = image_name.split('.')
+    stem, inv = whole_stem.split('_')
+    image_name = stem + "." + ext
+    return image_name
 
 
 def verify_name_input(image):

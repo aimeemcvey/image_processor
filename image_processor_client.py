@@ -8,6 +8,7 @@ import io
 import matplotlib.image as mpimg
 import json
 from matplotlib import pyplot as plt
+import binascii
 
 server_name = "http://127.0.0.1:5000"
 
@@ -50,15 +51,17 @@ def main_window():
                     messagebox.askretrycancel(title="Inversion Failure",
                                               message=invert_out,
                                               icon="error")
+                    return
             elif action.get() == "display":
                 print("going to display")
                 b64_to_convert = fetch_b64(image_choice.get())
                 try:
                     nd_to_disp = b64_string_to_ndarray(b64_to_convert)
-                except Error:
+                except binascii.Error:
                     messagebox.askretrycancel(title="Failure to Find Image",
                                               message=b64_to_convert,
                                               icon="error")
+                    return
                 img_out = display_image(nd_to_disp)
                 if img_out is False:
                     messagebox.askretrycancel(title="Image Display Failure",
@@ -136,6 +139,7 @@ def invert_image(image_name):
 
 def fetch_b64(image_name):
     r = requests.get(server_name + "/api/fetch_b64/{}".format(image_name))
+    print(image_name)
     if r.status_code != 200:
         failure_message = "Image collection failed: {} - {}" \
             .format(r.status_code, r.text)
@@ -156,7 +160,7 @@ def display_image(img_ndarray):
     try:
         plt.imshow(img_ndarray, interpolation="nearest")
         plt.show()
-    except Error:
+    except TypeError:
         return False
     return True
 

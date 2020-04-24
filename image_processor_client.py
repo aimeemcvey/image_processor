@@ -54,10 +54,15 @@ def main_window():
                 print("going to display")
                 b64_to_convert = fetch_b64(image_choice.get())
                 try:
-                    b64_string_to_ndarray(b64_to_convert)
+                    nd_to_disp = b64_string_to_ndarray(b64_to_convert)
                 except Error:
                     messagebox.askretrycancel(title="Failure to Find Image",
                                               message=b64_to_convert,
+                                              icon="error")
+                img_out = display_image(nd_to_disp)
+                if img_out is False:
+                    messagebox.askretrycancel(title="Image Display Failure",
+                                              message="Display failed",
                                               icon="error")
         return
 
@@ -144,9 +149,16 @@ def b64_string_to_ndarray(b64_string):
     image_buf = io.BytesIO(image_bytes)
     # check jpg and png differences
     img_ndarray = mpimg.imread(image_buf, format='JPG')
-    plt.imshow(img_ndarray, interpolation="nearest")
-    plt.show()
     return img_ndarray
+
+
+def display_image(img_ndarray):
+    try:
+        plt.imshow(img_ndarray, interpolation="nearest")
+        plt.show()
+    except Error:
+        return False
+    return True
 
 
 def upload_new_window():

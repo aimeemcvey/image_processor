@@ -68,8 +68,7 @@ def main_window():
                                                   message="Display failed",
                                                   icon="error")
                 if action.get() == "download":
-                    # convert b64 to image
-                    b64_to_image_file(b64_to_convert)
+                    b64_to_image_file(b64_to_convert, image_choice.get())
         return
 
     def update_list_combobox():
@@ -168,7 +167,8 @@ def display_image(img_ndarray):
     return True
 
 
-def b64_to_image_file(b64, new_filename):
+def b64_to_image_file(b64, filename):
+    new_filename = "images/{}".format(filename)
     image_bytes = base64.b64decode(b64)
     with open(new_filename, "wb") as out_file:
         out_file.write(image_bytes)

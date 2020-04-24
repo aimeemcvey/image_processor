@@ -62,6 +62,13 @@ def test_verify_image_name(in_dict, expected):
     assert answer == expected
 
 
+def test_add_inverted_image_to_db():
+    from image_processor_server import add_inverted_image_to_db
+    answer = add_inverted_image_to_db("904j5alkfsd0943ld", 'acl100.jpg')
+    expected = 'acl100.jpg'
+    assert answer == expected
+
+
 def test_is_inverted_in_database_true():
     from image_processor_server import is_inverted_in_database
     answer = is_inverted_in_database("acl100.jpg")
@@ -123,3 +130,4 @@ def test_ndarray_to_b64_string():
     answer = ndarray_to_b64_string(nd)
     expected = 'iVBORw0KGgoAAAANSUhE'
     assert answer[0:20] == expected
+

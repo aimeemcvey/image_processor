@@ -87,14 +87,6 @@ def generate_image_list():
     image_list.sort()
     return image_list
 
-# def is_inverted_in_database(name):
-#     db_item = Image.objects.raw({"_id": name})
-#     for item in db_item:
-#         pt = item.processed_time
-#     if pt is None:
-#         return False
-#     return True
-
 
 @app.route("/api/invert_image", methods=["POST"])
 def post_invert_image():
@@ -135,12 +127,14 @@ def is_inverted_in_database(name):
     return True
 
 
-def locate_b64_string(im_name):
-    print(im_name)
+def locate_b64_string(im_name, which=orig):
     to_act = Image.objects.raw({"_id": im_name})
     for doc in to_act:
         format_dict = doc.image_formats
-        b64_str_to_use = format_dict["b64_str"]
+        if which is orig:
+            b64_str_to_use = format_dict["b64_str"]
+        elif which is inverted:
+            b64_str_to_use = format_dict["inverted_b64_str"]
     return b64_str_to_use
 
 
@@ -184,6 +178,10 @@ def get_b64_from_db(image_name):
     check_result = verify_name_input(image_name)
     if check_result is not True:
         return check_result, 400
+    # if inverted in name, split at _ and .
+    # stem, ext = item.image_name.split('.')
+    # inverted_name = stem + "_inverted." + ext
+    # locate inverted_b64_string(image_name)
     b64_to_disp = locate_b64_string(image_name)
     return jsonify(b64_to_disp), 200
 

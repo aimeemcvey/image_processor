@@ -51,7 +51,8 @@ def main_window():
                                               icon="error")
             elif action.get() == "display":
                 print("going to display")
-                disp_out = fetch_b64(image_choice.get())
+                b64_to_convert = fetch_b64(image_choice.get())
+                b64_string_to_ndarray(b64_to_convert)
                 # if disp_out is False:
                 #     messagebox.askretrycancel(title="Display Failure",
                 #                               message=disp_out,
@@ -133,8 +134,17 @@ def fetch_b64(image_name):
             .format(r.status_code, r.text)
         return failure_message
     else:
-        print(json.loads(r.text))
         return json.loads(r.text)
+
+
+def b64_string_to_ndarray(b64_string):
+    image_bytes = base64.b64decode(b64_string)
+    image_buf = io.BytesIO(image_bytes)
+    # check jpg and png differences
+    img_ndarray = mpimg.imread(image_buf, format='JPG')
+    plt.imshow(img_ndarray, interpolation="nearest")
+    plt.show()
+    return img_ndarray
 
 
 def upload_new_window():

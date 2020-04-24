@@ -167,5 +167,20 @@ def add_inverted_image_to_db(b64_str, name):
     return doc.image_name
 
 
+@app.route("/api/fetch_b64/<image_name>", methods=["GET"])
+def get_b64_from_db(image_name):
+    name = verify_name_input(image_name)
+    im_list = generate_image_list()
+    return jsonify(im_list), 200
+
+
+def verify_name_input(image):
+    if type(image) is not str:
+        return "Bad image name in URL"
+    if is_image_in_database(image_name) is False:
+        return "Image {} does not exist in database".format(image)
+    return image
+
+
 if __name__ == "__main__":
     app.run()

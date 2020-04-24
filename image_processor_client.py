@@ -68,7 +68,11 @@ def main_window():
                                                   message="Display failed",
                                                   icon="error")
                 if action.get() == "download":
-                    b64_to_image_file(b64_to_convert, image_choice.get())
+                    img_out = b64_to_image_file(b64_to_convert, image_choice.get())
+                    if img_out is True:
+                        success_message = "Image downloaded successfully"
+                        messagebox.showinfo(title="Download Success",
+                                            message=success_message)
         return
 
     def update_list_combobox():

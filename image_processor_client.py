@@ -51,6 +51,7 @@ def main_window():
                     messagebox.askretrycancel(title="Inversion Failure",
                                               message=invert_out,
                                               icon="error")
+                    return
             elif action.get() == "display":
                 print("going to display")
                 b64_to_convert = fetch_b64(image_choice.get())
@@ -60,6 +61,7 @@ def main_window():
                     messagebox.askretrycancel(title="Failure to Find Image",
                                               message=b64_to_convert,
                                               icon="error")
+                    return
                 img_out = display_image(nd_to_disp)
                 if img_out is False:
                     messagebox.askretrycancel(title="Image Display Failure",

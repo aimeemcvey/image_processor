@@ -120,6 +120,7 @@ def verify_image_name(in_dict):
 
 def is_inverted_in_database(name):
     db_item = Image.objects.raw({"_id": name})
+    pt = None
     for item in db_item:
         pt = item.processed_time
     if pt is None:

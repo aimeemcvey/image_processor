@@ -125,11 +125,11 @@ def is_inverted_in_database(name):
 
 def locate_b64_string(in_dict):
     print(in_dict["image"])
-    to_invert = Image.objects.raw({"_id": in_dict["image"]})
-    for doc in to_invert:
+    to_act = Image.objects.raw({"_id": in_dict["image"]})
+    for doc in to_act:
         format_dict = doc.image_formats
-        b64_str_to_invert = format_dict["b64_str"]
-    return b64_str_to_invert
+        b64_str_to_use = format_dict["b64_str"]
+    return b64_str_to_use
 
 
 def b64_string_to_ndarray(b64_string):

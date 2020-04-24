@@ -62,6 +62,20 @@ def test_verify_image_name(in_dict, expected):
     assert answer == expected
 
 
+def test_is_inverted_in_database_true():
+    from image_processor_server import is_inverted_in_database
+    answer = is_inverted_in_database("acl100.jpg")
+    expected = True
+    assert answer == expected
+
+
+def test_is_inverted_in_database_false():
+    from image_processor_server import is_inverted_in_database
+    answer = is_inverted_in_database("acl200.jpg")
+    expected = False
+    assert answer == expected
+
+
 def test_locate_b64_string():
     from image_processor_server import locate_b64_string
     in_dict = {'image': 'acl100.jpg'}

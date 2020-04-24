@@ -148,10 +148,11 @@ def ndarray_to_b64_string(img_ndarray):
 
 def add_inverted_image_to_db(b64_str, name):
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    update_image = Image.update({"_id": name},
-                                {$set : {"processed_time": timestamp}})
-    x = update_image.save()
-    return update_image.image_name
+    to_add = Image.objects.raw({"_id": name})
+    for doc in to_add:
+        doc.processed_time = timestamp
+        x = doc.save()
+    return doc.image_name
 
 
 if __name__ == "__main__":

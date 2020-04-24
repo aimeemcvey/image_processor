@@ -7,6 +7,7 @@ import base64
 import io
 import matplotlib.image as mpimg
 import json
+from matplotlib import pyplot as plt
 
 server_name = "http://127.0.0.1:5000"
 
@@ -52,7 +53,12 @@ def main_window():
             elif action.get() == "display":
                 print("going to display")
                 b64_to_convert = fetch_b64(image_choice.get())
-                b64_string_to_ndarray(b64_to_convert)
+                try:
+                    b64_string_to_ndarray(b64_to_convert)
+                except Error:
+                    messagebox.askretrycancel(title="Failure to Find Image",
+                                              message=b64_to_convert,
+                                              icon="error")
                 # if disp_out is False:
                 #     messagebox.askretrycancel(title="Display Failure",
                 #                               message=disp_out,
@@ -130,7 +136,7 @@ def invert_image(image_name):
 def fetch_b64(image_name):
     r = requests.get(server_name + "/api/fetch_b64/{}".format(image_name))
     if r.status_code != 200:
-        failure_message = "Image display failed: {} - {}" \
+        failure_message = "Image collection failed: {} - {}" \
             .format(r.status_code, r.text)
         return failure_message
     else:

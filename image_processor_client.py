@@ -127,14 +127,14 @@ def invert_image(image_name):
 
 
 def fetch_b64(image_name):
-    image_to_fetch = {"image": image_name}
-    r = requests.post(server_name + "/api/display_image", json=image_to_fetch)
+    r = requests.get(server_name + "/api/fetch_b64/{}".format(image_name))
     if r.status_code != 200:
         failure_message = "Image display failed: {} - {}" \
             .format(r.status_code, r.text)
         return failure_message
     else:
-        return True
+        print(json.loads(r.text))
+        return json.loads(r.text)
 
 
 def upload_new_window():

@@ -55,7 +55,6 @@ def is_image_in_database(name):
     db_items = Image.objects.raw({})
     for item in db_items:
         check_db.append(item.image_name)
-        # try except to see if processed image exists
     if name in check_db:
         return True
     return False
@@ -94,6 +93,9 @@ def post_invert_image():
     if is_image_in_database(in_dict["image"]) is False:
         return "Image {} not found in database" \
                    .format(in_dict["image"]), 400
+    if is_inverted_in_database(in_dict["image"]) is True:
+        return "Image {} has already been inverted" \
+                   .format(in_dict["image"]), 400
     b64_str_to_invert = locate_b64_string(in_dict)
     ndarray_to_invert = b64_string_to_ndarray(b64_str_to_invert)
     inverted_nd = process_image_inversion(ndarray_to_invert)
@@ -109,6 +111,15 @@ def verify_image_name(in_dict):
         return "{} key not found".format(expected_key)
     if type(in_dict[expected_key]) is not expected_type:
         return "{} value not a string".format(expected_key)
+    return True
+
+
+def is_inverted_in_database(name):
+    db_item = Image.objects.raw({"_id": name})
+    for item in db_item:
+        pt = item.processed_time
+    if pt is None:
+        return False
     return True
 
 

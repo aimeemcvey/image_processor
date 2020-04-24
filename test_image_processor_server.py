@@ -130,3 +130,14 @@ def test_ndarray_to_b64_string():
     answer = ndarray_to_b64_string(nd)
     expected = 'iVBORw0KGgoAAAANSUhE'
     assert answer[0:20] == expected
+
+
+@pytest.mark.parametrize("im_name, expected", [
+    ("acl100.jpg", True),
+    (39032410, "Bad image name in URL"),
+    ("acl3.jpg", "Image acl3.jpg does not exist in database"),
+])
+def test_verify_name_input(im_name, expected):
+    from image_processor_server import verify_name_input
+    answer = verify_name_input(im_name)
+    assert answer == expected

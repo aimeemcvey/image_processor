@@ -132,6 +132,13 @@ def test_ndarray_to_b64_string():
     assert answer[0:20] == expected
 
 
+def test_return_name():
+    from image_processor_server import return_name
+    answer = return_name("mcl124_inverted.jpg")
+    expected = "mcl124.jpg"
+    assert answer == expected
+
+
 @pytest.mark.parametrize("im_name, expected", [
     ("acl100.jpg", True),
     (39032410, "Bad image name in URL"),

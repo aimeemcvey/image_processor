@@ -7,6 +7,7 @@ import base64
 import io
 import matplotlib.image as mpimg
 import json
+from matplotlib import pyplot as plt
 
 server_name = "http://127.0.0.1:5000"
 
@@ -38,17 +39,31 @@ def main_window():
                                            icon="question")
         if response is False:
             return
-        elif response is True and action.get() == "invert":
-            print("going to invert")
-            invert_out = invert_image(image_choice.get())
-            if invert_out is True:
-                success_message = "Image inverted successfully"
-                messagebox.showinfo(title="Inversion Success",
-                                    message=success_message)
-            else:
-                messagebox.askretrycancel(title="Inversion Failure",
-                                          message=invert_out,
-                                          icon="error")
+        elif response is True:
+            if action.get() == "invert":
+                invert_out = invert_image(image_choice.get())
+                if invert_out is True:
+                    success_message = "Image inverted successfully"
+                    messagebox.showinfo(title="Inversion Success",
+                                        message=success_message)
+                else:
+                    messagebox.askretrycancel(title="Inversion Failure",
+                                              message=invert_out,
+                                              icon="error")
+            elif action.get() == "display":
+                print("going to display")
+                b64_to_convert = fetch_b64(image_choice.get())
+                try:
+                    nd_to_disp = b64_string_to_ndarray(b64_to_convert)
+                except Error:
+                    messagebox.askretrycancel(title="Failure to Find Image",
+                                              message=b64_to_convert,
+                                              icon="error")
+                img_out = display_image(nd_to_disp)
+                if img_out is False:
+                    messagebox.askretrycancel(title="Image Display Failure",
+                                              message="Display failed",
+                                              icon="error")
         return
 
     def update_list_combobox():
@@ -119,6 +134,33 @@ def invert_image(image_name):
         return True
 
 
+def fetch_b64(image_name):
+    r = requests.get(server_name + "/api/fetch_b64/{}".format(image_name))
+    if r.status_code != 200:
+        failure_message = "Image collection failed: {} - {}" \
+            .format(r.status_code, r.text)
+        return failure_message
+    else:
+        return json.loads(r.text)
+
+
+def b64_string_to_ndarray(b64_string):
+    image_bytes = base64.b64decode(b64_string)
+    image_buf = io.BytesIO(image_bytes)
+    # check jpg and png differences
+    img_ndarray = mpimg.imread(image_buf, format='JPG')
+    return img_ndarray
+
+
+def display_image(img_ndarray):
+    try:
+        plt.imshow(img_ndarray, interpolation="nearest")
+        plt.show()
+    except Error:
+        return False
+    return True
+
+
 def upload_new_window():
     def upload_button():
         image_name = image_selection.get()
@@ -126,7 +168,10 @@ def upload_new_window():
         image_entry.delete(0, 'end')
         b64_str = image_file_to_b64("images/{}".format(image_name))
         if b64_str is False:  # file not found
-            not_found_message = "{} could not be found.".format(image_name)
+            not_found_message = "{} could not be found. \n" \
+                                "Check image spelling and extension type " \
+                                "and ensure image is in the /images " \
+                                "directory" .format(image_name)
             response = messagebox.showerror(title="File Not Found",
                                             message=not_found_message,
                                             icon="error")

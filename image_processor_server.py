@@ -96,7 +96,7 @@ def post_invert_image():
     if is_inverted_in_database(in_dict["image"]) is True:
         return "Image {} has already been inverted" \
                    .format(in_dict["image"]), 400
-    b64_str_to_invert = locate_b64_string(in_dict)
+    b64_str_to_invert = locate_b64_string(in_dict["image"])
     ndarray_to_invert = b64_string_to_ndarray(b64_str_to_invert)
     inverted_nd = process_image_inversion(ndarray_to_invert)
     inverted_b64 = ndarray_to_b64_string(inverted_nd)
@@ -123,13 +123,13 @@ def is_inverted_in_database(name):
     return True
 
 
-def locate_b64_string(in_dict):
-    print(in_dict["image"])
-    to_invert = Image.objects.raw({"_id": in_dict["image"]})
-    for doc in to_invert:
+def locate_b64_string(im_name):
+    print(im_name)
+    to_act = Image.objects.raw({"_id": im_name})
+    for doc in to_act:
         format_dict = doc.image_formats
-        b64_str_to_invert = format_dict["b64_str"]
-    return b64_str_to_invert
+        b64_str_to_use = format_dict["b64_str"]
+    return b64_str_to_use
 
 
 def b64_string_to_ndarray(b64_string):
@@ -165,6 +165,23 @@ def add_inverted_image_to_db(b64_str, name):
         doc.image_formats.update({"inverted_b64_str": b64_str})
         doc.save()
     return doc.image_name
+
+
+@app.route("/api/fetch_b64/<image_name>", methods=["GET"])
+def get_b64_from_db(image_name):
+    check_result = verify_name_input(image_name)
+    if check_result is not True:
+        return check_result, 400
+    b64_to_disp = locate_b64_string(image_name)
+    return jsonify(b64_to_disp), 200
+
+
+def verify_name_input(image):
+    if type(image) is not str:
+        return "Bad image name in URL"
+    if is_image_in_database(image) is False:
+        return "Image {} does not exist in database".format(image)
+    return True
 
 
 if __name__ == "__main__":

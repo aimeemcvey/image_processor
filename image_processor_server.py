@@ -175,14 +175,22 @@ def add_inverted_image_to_db(b64_str, name):
 
 @app.route("/api/fetch_b64/<image_name>", methods=["GET"])
 def get_b64_from_db(image_name):
+    print(image_name)
+    if "inverted" in image_name:
+        print("this image is inverted")
+        whole_stem, ext = image_name.split('.')
+        stem, inv = whole_stem.split('_')
+        image_name = stem + "." + ext
+        print(image_name)
+        status = inv
     check_result = verify_name_input(image_name)
     if check_result is not True:
         return check_result, 400
-    # if inverted in name, split at _ and .
-    # stem, ext = item.image_name.split('.')
-    # inverted_name = stem + "_inverted." + ext
-    # locate locate_b64_string(image_name, "inverted")
-    b64_to_disp = locate_b64_string(image_name)
+    if status is inv:
+        b64_to_disp = locate_b64_string(image_name, "inverted")
+    else:
+        b64_to_disp = locate_b64_string(image_name)
+        print("doing this")
     return jsonify(b64_to_disp), 200
 
 

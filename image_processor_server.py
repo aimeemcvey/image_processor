@@ -5,7 +5,6 @@ from datetime import datetime
 import requests
 from pymodm import connect, MongoModel, fields
 from pymodm import errors as pymodm_errors
-from PIL import Image, ImageTk
 import base64
 import io
 import matplotlib.image as mpimg
@@ -22,6 +21,7 @@ class Image(MongoModel):
     image_name = fields.CharField(primary_key=True)
     image_formats = fields.DictField()
     upload_time = fields.CharField()
+    processed_time = fields.CharField()
     # image_size = fields.ListField()
     # processed_info = fields.ListField()
 
@@ -93,10 +93,14 @@ def post_invert_image():
     if is_image_in_database(in_dict["image"]) is False:
         return "Image {} not found in database" \
                    .format(in_dict["image"]), 400
+    if is_inverted_in_database(in_dict["image"]) is True:
+        return "Image {} has already been inverted" \
+                   .format(in_dict["image"]), 400
     b64_str_to_invert = locate_b64_string(in_dict)
     ndarray_to_invert = b64_string_to_ndarray(b64_str_to_invert)
     inverted_nd = process_image_inversion(ndarray_to_invert)
     inverted_b64 = ndarray_to_b64_string(inverted_nd)
+    add_inverted_image_to_db(inverted_b64, in_dict["image"])
     return inverted_b64, 200
 
 
@@ -107,6 +111,15 @@ def verify_image_name(in_dict):
         return "{} key not found".format(expected_key)
     if type(in_dict[expected_key]) is not expected_type:
         return "{} value not a string".format(expected_key)
+    return True
+
+
+def is_inverted_in_database(name):
+    db_item = Image.objects.raw({"_id": name})
+    for item in db_item:
+        pt = item.processed_time
+    if pt is None:
+        return False
     return True
 
 
@@ -142,6 +155,16 @@ def ndarray_to_b64_string(img_ndarray):
     y = base64.b64encode(f.getvalue())
     b64_string = str(y, encoding='utf-8')
     return b64_string
+
+
+def add_inverted_image_to_db(b64_str, name):
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    to_add = Image.objects.raw({"_id": name})
+    for doc in to_add:
+        doc.processed_time = timestamp
+        doc.image_formats.update({"inverted_b64_str": b64_str})
+        doc.save()
+    return doc.image_name
 
 
 if __name__ == "__main__":

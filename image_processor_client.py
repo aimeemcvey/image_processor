@@ -38,17 +38,24 @@ def main_window():
                                            icon="question")
         if response is False:
             return
-        elif response is True and action.get() == "invert":
-            print("going to invert")
-            invert_out = invert_image(image_choice.get())
-            if invert_out is True:
-                success_message = "Image inverted successfully"
-                messagebox.showinfo(title="Inversion Success",
-                                    message=success_message)
-            else:
-                messagebox.askretrycancel(title="Inversion Failure",
-                                          message=invert_out,
-                                          icon="error")
+        elif response is True:
+            if action.get() == "invert":
+                invert_out = invert_image(image_choice.get())
+                if invert_out is True:
+                    success_message = "Image inverted successfully"
+                    messagebox.showinfo(title="Inversion Success",
+                                        message=success_message)
+                else:
+                    messagebox.askretrycancel(title="Inversion Failure",
+                                              message=invert_out,
+                                              icon="error")
+            elif action.get() == "display":
+                print("going to display")
+                disp_out = fetch_b64(image_choice.get())
+                # if disp_out is False:
+                #     messagebox.askretrycancel(title="Display Failure",
+                #                               message=disp_out,
+                #                               icon="error")
         return
 
     def update_list_combobox():
@@ -113,6 +120,17 @@ def invert_image(image_name):
     r = requests.post(server_name + "/api/invert_image", json=image_to_invert)
     if r.status_code != 200:
         failure_message = "Image inversion failed: {} - {}" \
+            .format(r.status_code, r.text)
+        return failure_message
+    else:
+        return True
+
+
+def fetch_b64(image_name):
+    image_to_fetch = {"image": image_name}
+    r = requests.post(server_name + "/api/display_image", json=image_to_fetch)
+    if r.status_code != 200:
+        failure_message = "Image display failed: {} - {}" \
             .format(r.status_code, r.text)
         return failure_message
     else:

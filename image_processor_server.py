@@ -179,7 +179,7 @@ def get_b64_from_db(image_name):
 def verify_name_input(image):
     if type(image) is not str:
         return "Bad image name in URL"
-    if is_image_in_database(image_name) is False:
+    if is_image_in_database(image) is False:
         return "Image {} does not exist in database".format(image)
     return True
 

@@ -52,8 +52,7 @@ def main_window():
                                               message=invert_out,
                                               icon="error")
                     return
-            elif action.get() == "display":
-                print("going to display")
+            else:
                 b64_to_convert = fetch_b64(image_choice.get())
                 try:
                     nd_to_disp = b64_string_to_ndarray(b64_to_convert)
@@ -62,11 +61,15 @@ def main_window():
                                               message=b64_to_convert,
                                               icon="error")
                     return
-                img_out = display_image(nd_to_disp)
-                if img_out is False:
-                    messagebox.askretrycancel(title="Image Display Failure",
-                                              message="Display failed",
-                                              icon="error")
+                if action.get() == "display":
+                    img_out = display_image(nd_to_disp)
+                    if img_out is False:
+                        messagebox.askretrycancel(title="Image Display Failure",
+                                                  message="Display failed",
+                                                  icon="error")
+                if action.get() == "download":
+                    # convert b64 to image
+                    b64_to_image_file(b64_to_convert)
         return
 
     def update_list_combobox():
@@ -165,6 +168,13 @@ def display_image(img_ndarray):
     return True
 
 
+def b64_to_image_file(b64, new_filename):
+    image_bytes = base64.b64decode(b64)
+    with open(new_filename, "wb") as out_file:
+        out_file.write(image_bytes)
+    return True
+
+
 def upload_new_window():
     def upload_button():
         image_name = image_selection.get()
@@ -175,7 +185,7 @@ def upload_new_window():
             not_found_message = "{} could not be found. \n" \
                                 "Check image spelling and extension type " \
                                 "and ensure image is in the /images " \
-                                "directory" .format(image_name)
+                                "directory".format(image_name)
             response = messagebox.showerror(title="File Not Found",
                                             message=not_found_message,
                                             icon="error")

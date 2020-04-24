@@ -59,10 +59,6 @@ def main_window():
                     messagebox.askretrycancel(title="Failure to Find Image",
                                               message=b64_to_convert,
                                               icon="error")
-                # if disp_out is False:
-                #     messagebox.askretrycancel(title="Display Failure",
-                #                               message=disp_out,
-                #                               icon="error")
         return
 
     def update_list_combobox():
@@ -160,7 +156,9 @@ def upload_new_window():
         image_entry.delete(0, 'end')
         b64_str = image_file_to_b64("images/{}".format(image_name))
         if b64_str is False:  # file not found
-            not_found_message = "{} could not be found.".format(image_name)
+            not_found_message = "{} could not be found. \n" \
+                                "Check image spelling and extension type and " \
+                                "ensure image is in the /images directory".format(image_name)
             response = messagebox.showerror(title="File Not Found",
                                             message=not_found_message,
                                             icon="error")

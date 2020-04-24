@@ -127,13 +127,13 @@ def is_inverted_in_database(name):
     return True
 
 
-def locate_b64_string(im_name, which=orig):
+def locate_b64_string(im_name, which="orig"):
     to_act = Image.objects.raw({"_id": im_name})
     for doc in to_act:
         format_dict = doc.image_formats
-        if which is orig:
+        if which is "orig":
             b64_str_to_use = format_dict["b64_str"]
-        elif which is inverted:
+        elif which is "inverted":
             b64_str_to_use = format_dict["inverted_b64_str"]
     return b64_str_to_use
 
@@ -181,7 +181,7 @@ def get_b64_from_db(image_name):
     # if inverted in name, split at _ and .
     # stem, ext = item.image_name.split('.')
     # inverted_name = stem + "_inverted." + ext
-    # locate inverted_b64_string(image_name)
+    # locate locate_b64_string(image_name, "inverted")
     b64_to_disp = locate_b64_string(image_name)
     return jsonify(b64_to_disp), 200
 

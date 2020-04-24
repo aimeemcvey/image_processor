@@ -46,8 +46,10 @@ def test_add_image_to_db_another():
 
 def test_generate_image_list():
     from image_processor_server import generate_image_list
+    from image_processor_server import add_inverted_image_to_db
+    add_inverted_image_to_db("324q093walkds", 'acl200.jpg')
     answer = generate_image_list()
-    expected = ['acl100.jpg', 'acl200.jpg']
+    expected = ['acl100.jpg', 'acl200.jpg', 'acl200_inverted.jpg']
     assert answer == expected
 
 
@@ -78,7 +80,7 @@ def test_is_inverted_in_database_true():
 
 def test_is_inverted_in_database_false():
     from image_processor_server import is_inverted_in_database
-    answer = is_inverted_in_database("acl200.jpg")
+    answer = is_inverted_in_database("acl500.jpg")
     expected = False
     assert answer == expected
 

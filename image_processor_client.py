@@ -160,7 +160,7 @@ def display_image(img_ndarray):
     try:
         plt.imshow(img_ndarray, interpolation="nearest")
         plt.show()
-    except Error:
+    except TypeError:
         return False
     return True
 

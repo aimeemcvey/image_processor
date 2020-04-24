@@ -80,8 +80,21 @@ def generate_image_list():
     db_items = Image.objects.raw({})
     for item in db_items:
         image_list.append(item.image_name)
+        print(item.image_name)
+        if is_inverted_in_database(item.image_name) is True:
+            inverted_name = "inverted_" + item.image_name
+            image_list.append(inverted_name)
+            print(inverted_name)
     image_list.sort()
     return image_list
+
+# def is_inverted_in_database(name):
+#     db_item = Image.objects.raw({"_id": name})
+#     for item in db_item:
+#         pt = item.processed_time
+#     if pt is None:
+#         return False
+#     return True
 
 
 @app.route("/api/invert_image", methods=["POST"])

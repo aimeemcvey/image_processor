@@ -93,6 +93,14 @@ def test_locate_b64_string():
     assert answer == expected
 
 
+def test_locate_b64_string_inverted():
+    from image_processor_server import locate_b64_string
+    name = 'acl100.jpg'
+    answer = locate_b64_string(name, "inverted")
+    expected = "904j5alkfsd0943ld"
+    assert answer == expected
+
+
 def test_b64_string_to_ndarray():
     from image_processor_client import image_file_to_b64
     from image_processor_server import b64_string_to_ndarray

@@ -151,7 +151,8 @@ def add_inverted_image_to_db(b64_str, name):
     to_add = Image.objects.raw({"_id": name})
     for doc in to_add:
         doc.processed_time = timestamp
-        x = doc.save()
+        doc.image_formats.update({"inverted_b64_str": b64_str})
+        doc.save()
     return doc.image_name
 
 

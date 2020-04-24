@@ -96,7 +96,7 @@ def post_invert_image():
     if is_inverted_in_database(in_dict["image"]) is True:
         return "Image {} has already been inverted" \
                    .format(in_dict["image"]), 400
-    b64_str_to_invert = locate_b64_string(in_dict)
+    b64_str_to_invert = locate_b64_string(in_dict["image"])
     ndarray_to_invert = b64_string_to_ndarray(b64_str_to_invert)
     inverted_nd = process_image_inversion(ndarray_to_invert)
     inverted_b64 = ndarray_to_b64_string(inverted_nd)
@@ -123,9 +123,9 @@ def is_inverted_in_database(name):
     return True
 
 
-def locate_b64_string(in_dict):
-    print(in_dict["image"])
-    to_act = Image.objects.raw({"_id": in_dict["image"]})
+def locate_b64_string(im_name):
+    print(im_name)
+    to_act = Image.objects.raw({"_id": im_name})
     for doc in to_act:
         format_dict = doc.image_formats
         b64_str_to_use = format_dict["b64_str"]

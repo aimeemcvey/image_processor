@@ -85,8 +85,8 @@ def test_is_inverted_in_database_false():
 
 def test_locate_b64_string():
     from image_processor_server import locate_b64_string
-    in_dict = {'image': 'acl100.jpg'}
-    answer = locate_b64_string(in_dict)
+    name = 'acl100.jpg'
+    answer = locate_b64_string(name)
     expected = "3lkewar90eq3ljafjdl"
     assert answer == expected
 

@@ -80,11 +80,10 @@ def generate_image_list():
     db_items = Image.objects.raw({})
     for item in db_items:
         image_list.append(item.image_name)
-        print(item.image_name)
         if is_inverted_in_database(item.image_name) is True:
-            inverted_name = "inverted_" + item.image_name
+            stem, ext = item.image_name.split('.')
+            inverted_name = stem + "_inverted." + ext
             image_list.append(inverted_name)
-            print(inverted_name)
     image_list.sort()
     return image_list
 

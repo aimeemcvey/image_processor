@@ -130,4 +130,3 @@ def test_ndarray_to_b64_string():
     answer = ndarray_to_b64_string(nd)
     expected = 'iVBORw0KGgoAAAANSUhE'
     assert answer[0:20] == expected
-

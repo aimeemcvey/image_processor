@@ -49,7 +49,8 @@ def test_generate_image_list():
     from image_processor_server import add_inverted_image_to_db
     add_inverted_image_to_db("324q093walkds", 'acl200.jpg')
     answer = generate_image_list()
-    expected = ['acl100.jpg', 'acl200.jpg', 'acl200_inverted.jpg']
+    expected = ['acl100.jpg', 'acl200.jpg', 'acl200_inverted.jpg',
+                'acl300.jpg', 'acl300_inverted.jpg']
     assert answer == expected
 
 
@@ -157,4 +158,20 @@ def test_return_name():
 def test_verify_name_input(im_name, expected):
     from image_processor_server import verify_name_input
     answer = verify_name_input(im_name)
+    assert answer == expected
+
+
+def test_locate_details():
+    from image_processor_server import locate_details
+    name = 'acl300.jpg'
+    answer = locate_details(name)
+    expected = "2020-04-25 15:15:08"
+    assert answer == expected
+
+
+def test_locate_details_inverted():
+    from image_processor_server import locate_details
+    name = 'acl300.jpg'
+    answer = locate_details(name, "inverted")
+    expected = "2020-04-25 15:15:58"
     assert answer == expected

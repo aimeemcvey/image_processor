@@ -66,7 +66,8 @@ def main_window():
                 if action.get() == "display":
                     img_out = display_image(nd_to_disp)
                     if img_out is False:
-                        messagebox.askretrycancel(title="Image Display Failure",
+                        messagebox.askretrycancel(title="Image Display "
+                                                        "Failure",
                                                   message="Display failed",
                                                   icon="error")
                 if action.get() == "download":

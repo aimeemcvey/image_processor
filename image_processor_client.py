@@ -304,6 +304,10 @@ def display_window(tk_image, image):
         image_list = get_image_list()
         image_choice_box['values'] = image_list
 
+    def details_button():
+        get_details(image_choice.get())
+        return
+
     sub_disp = Toplevel()  # sets up main window
     sub_disp.title("Display")
     sub_disp.columnconfigure(0, pad=8)
@@ -322,7 +326,7 @@ def display_window(tk_image, image):
     # Add buttons
     compare_btn = ttk.Button(sub_disp, text="Compare")
     compare_btn.grid(column=0, row=3)
-    deets_btn = ttk.Button(sub_disp, text="Details")
+    deets_btn = ttk.Button(sub_disp, text="Details", command=details_button)
     deets_btn.grid(column=2, row=3)
     back_btn = ttk.Button(sub_disp, text="Back", command=back_button)
     back_btn.grid(column=3, row=3)
@@ -337,6 +341,17 @@ def display_window(tk_image, image):
     image_choice_box.state(["readonly"])
 
     return
+
+
+def get_details(image_name):
+    r = requests.get(server_name + "/api/get_details/{}".format(image_name))
+    print(image_name)
+    if r.status_code != 200:
+        failure_message = "Detail collection failed: {} - {}" \
+            .format(r.status_code, r.text)
+        return failure_message
+    else:
+        return json.loads(r.text)
 
 
 if __name__ == "__main__":

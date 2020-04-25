@@ -172,6 +172,7 @@ def ndarray_to_tkinter_image(img_ndarray):
     out_img = io.BytesIO()
     out_img.write(f.getvalue())
     img_obj = Image.open(out_img)
+    img_obj = img_obj.resize((400, 400))
     tk_image = ImageTk.PhotoImage(img_obj)
     return tk_image
 
@@ -311,10 +312,10 @@ def display_window(tk_image, image):
 
     # Image selection
     select_label = ttk.Label(sub_disp, text="Choose an image:")
-    select_label.grid(column=0, row=1)
+    select_label.grid(column=0, row=3)
     image_selection = StringVar()
     image_entry = ttk.Entry(sub_disp, textvariable=image_selection, width=30)
-    image_entry.grid(column=1, row=1)
+    image_entry.grid(column=1, row=3)
 
     image_label = ttk.Label(sub_disp, image=tk_image)
     image_label.image = tk_image

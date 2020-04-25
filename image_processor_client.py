@@ -68,15 +68,8 @@ def main_window():
                 if action.get() == "display":
                     # img_out = display_image(nd_to_disp)
                     tk_image = ndarray_to_tkinter_image(nd_to_disp)
-                    display_window(tk_image)
-                    # image_label.image = tk_image
-                    # image_label.configure(image=tk_image)
+                    display_window(tk_image, image_choice.get())
                     return
-                    # if img_out is False:
-                    #     messagebox.askretrycancel(title="Image Display "
-                    #                                     "Failure",
-                    #                               message="Display failed",
-                    #                               icon="error")
                 if action.get() == "download":
                     f = create_filename(image_choice.get())
                     img_out = b64_to_image_file(b64_to_convert, f)
@@ -300,7 +293,7 @@ def upload_image(image_name, b64_str):
         return True
 
 
-def display_window(tk_image):
+def display_window(tk_image, image):
 
     def back_button():
         sub_disp.destroy()
@@ -313,7 +306,7 @@ def display_window(tk_image):
     sub_disp.columnconfigure(2, pad=8)
 
     # Add main label
-    top_label = ttk.Label(sub_disp, text="Display Image")
+    top_label = ttk.Label(sub_disp, text="{}".format(image))
     top_label.grid(column=0, row=0, columnspan=2, sticky=W)
 
     # Image selection
@@ -328,7 +321,7 @@ def display_window(tk_image):
     image_label.grid(column=0, row=1, columnspan=2)
 
     # Add buttons
-    upload_btn = ttk.Button(sub_disp, text="Upload", command=upload_button)
+    upload_btn = ttk.Button(sub_disp, text="Upload")  #, command=upload_button)
     upload_btn.grid(column=0, row=6)
     back_btn = ttk.Button(sub_disp, text="Back", command=back_button)
     back_btn.grid(column=1, row=6)

@@ -175,14 +175,16 @@ def display_image(img_ndarray):
 
 def b64_to_image_file(b64, filename):
     new_filename = "images/{}".format(filename)
-    found = path.exists(new_filename)
+    found = True
     i = 0
     stem, ext = new_filename.split('.')
     while found is True:
-        found = path.exists(stem + "_" + str(i) + "." + ext)
+        if i == 0:
+            found = path.exists(new_filename)
+        else:
+            found = path.exists(stem + "_" + str(i) + "." + ext)
+            new_filename = stem + "_" + str(i) + "." + ext
         i += 1
-    if i != 0:
-        new_filename = stem + "_" + str(i) + "." + ext
     image_bytes = base64.b64decode(b64)
     with open(new_filename, "wb") as out_file:
         out_file.write(image_bytes)

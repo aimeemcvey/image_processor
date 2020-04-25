@@ -311,6 +311,17 @@ def display_window(tk_image, size, image):
                             message=deets_message)
         return
 
+    def compare_button():
+        if image_choice.get() == "":
+            no_selection_message = "Please select an image to" \
+                                   "compare with."
+            messagebox.showerror(title="Selection Error",
+                                 message=no_selection_message,
+                                 icon="error")
+        else:
+            compare_window(tk_image, image_choice.get())
+        return
+
     sub_disp = Toplevel()  # sets up main window
     sub_disp.title("Display")
     sub_disp.columnconfigure(0, pad=8)
@@ -327,7 +338,7 @@ def display_window(tk_image, size, image):
     image_label.grid(column=0, row=1, columnspan=4)
 
     # Add buttons
-    compare_btn = ttk.Button(sub_disp, text="Compare")
+    compare_btn = ttk.Button(sub_disp, text="Compare", command=compare_button)
     compare_btn.grid(column=0, row=3)
     deets_btn = ttk.Button(sub_disp, text="Details", command=details_button)
     deets_btn.grid(column=2, row=3)
@@ -366,6 +377,29 @@ def create_deets_message(time, size, image):
                     "Image size: {} x {}" \
         .format(time_type, time, width, height)
     return deets_message
+
+
+def compare_window(tk_image1, image2):
+    def back_button():
+        sub_comp.destroy()
+        return
+
+    sub_comp = Toplevel()  # sets up main window
+    sub_comp.title("Compare")
+    sub_comp.columnconfigure(0, pad=8)
+    sub_comp.columnconfigure(1, pad=8)
+    sub_comp.columnconfigure(2, pad=8)
+    sub_comp.columnconfigure(3, pad=8)
+
+    image_label = ttk.Label(sub_comp, image=tk_image)
+    image_label.image = tk_image
+    image_label.grid(column=0, row=1, columnspan=4)
+
+    # Add buttons
+    back_btn = ttk.Button(sub_comp, text="Back", command=back_button)
+    back_btn.grid(column=3, row=3)
+
+    return
 
 
 if __name__ == "__main__":

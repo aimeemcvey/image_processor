@@ -67,7 +67,11 @@ def main_window():
                     return
                 if action.get() == "display":
                     # img_out = display_image(nd_to_disp)
-                    img_out = ndarray_to_tkinter_image(nd_to_disp)
+                    tk_image = ndarray_to_tkinter_image(nd_to_disp)
+                    display_window(tk_image)
+                    # image_label.image = tk_image
+                    # image_label.configure(image=tk_image)
+                    return
                     # if img_out is False:
                     #     messagebox.askretrycancel(title="Image Display "
                     #                                     "Failure",
@@ -294,6 +298,42 @@ def upload_image(image_name, b64_str):
         return failure_message
     else:
         return True
+
+
+def display_window(tk_image):
+
+    def back_button():
+        sub_disp.destroy()
+        return
+
+    sub_disp = Toplevel()  # sets up main window
+    sub_disp.title("Display")
+    sub_disp.columnconfigure(0, pad=8)
+    sub_disp.columnconfigure(1, pad=8)
+    sub_disp.columnconfigure(2, pad=8)
+
+    # Add main label
+    top_label = ttk.Label(sub_disp, text="Display Image")
+    top_label.grid(column=0, row=0, columnspan=2, sticky=W)
+
+    # Image selection
+    select_label = ttk.Label(sub_disp, text="Choose an image:")
+    select_label.grid(column=0, row=1)
+    image_selection = StringVar()
+    image_entry = ttk.Entry(sub_disp, textvariable=image_selection, width=30)
+    image_entry.grid(column=1, row=1)
+
+    image_label = ttk.Label(sub_disp, image=tk_image)
+    image_label.image = tk_image
+    image_label.grid(column=0, row=1, columnspan=2)
+
+    # Add buttons
+    upload_btn = ttk.Button(sub_disp, text="Upload", command=upload_button)
+    upload_btn.grid(column=0, row=6)
+    back_btn = ttk.Button(sub_disp, text="Back", command=back_button)
+    back_btn.grid(column=1, row=6)
+
+    return
 
 
 if __name__ == "__main__":

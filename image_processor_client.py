@@ -313,13 +313,22 @@ def display_window(tk_image, size, image):
 
     def compare_button():
         if image_choice.get() == "":
-            no_selection_message = "Please select an image to" \
+            no_selection_message = "Please select an image to " \
                                    "compare with."
             messagebox.showerror(title="Selection Error",
                                  message=no_selection_message,
                                  icon="error")
         else:
-            compare_window(tk_image, image_choice.get())
+            b64_to_convert = fetch_b64(image_choice.get())
+            try:
+                nd_to_disp = b64_string_to_ndarray(b64_to_convert)
+            except binascii.Error:
+                messagebox.askretrycancel(title="Failure to Find Image",
+                                          message=b64_to_convert,
+                                          icon="error")
+                return
+            tk_image2, pixel_size = ndarray_to_tkinter_image(nd_to_disp)
+            compare_window(tk_image, tk_image2)
         return
 
     sub_disp = Toplevel()  # sets up main window
@@ -379,7 +388,7 @@ def create_deets_message(time, size, image):
     return deets_message
 
 
-def compare_window(tk_image1, image2):
+def compare_window(tk_image1, tk_image2):
     def back_button():
         sub_comp.destroy()
         return
@@ -391,13 +400,16 @@ def compare_window(tk_image1, image2):
     sub_comp.columnconfigure(2, pad=8)
     sub_comp.columnconfigure(3, pad=8)
 
-    image_label = ttk.Label(sub_comp, image=tk_image)
-    image_label.image = tk_image
-    image_label.grid(column=0, row=1, columnspan=4)
+    image_label = ttk.Label(sub_comp, image=tk_image1)
+    image_label.image = tk_image1
+    image_label.grid(column=0, row=1, columnspan=2)
+    image_label2 = ttk.Label(sub_comp, image=tk_image2)
+    image_label2.image = tk_image2
+    image_label2.grid(column=2, row=1, columnspan=2)
 
     # Add buttons
     back_btn = ttk.Button(sub_comp, text="Back", command=back_button)
-    back_btn.grid(column=3, row=3)
+    back_btn.grid(column=1, row=3, columnspan=2)
 
     return
 

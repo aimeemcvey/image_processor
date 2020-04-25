@@ -309,30 +309,31 @@ def display_window(tk_image, image):
     sub_disp.columnconfigure(0, pad=8)
     sub_disp.columnconfigure(1, pad=8)
     sub_disp.columnconfigure(2, pad=8)
+    sub_disp.columnconfigure(3, pad=8)
 
     # Add main label
     top_label = ttk.Label(sub_disp, text="{}".format(image))
-    top_label.grid(column=1, row=0, columnspan=2, sticky=W)
+    top_label.grid(column=1, row=0, columnspan=2)
 
     image_label = ttk.Label(sub_disp, image=tk_image)
     image_label.image = tk_image
-    image_label.grid(column=0, row=1, columnspan=3)
+    image_label.grid(column=0, row=1, columnspan=4)
 
     # Add buttons
     compare_btn = ttk.Button(sub_disp, text="Compare")
-    compare_btn.grid(column=0, row=2)
+    compare_btn.grid(column=0, row=3)
     deets_btn = ttk.Button(sub_disp, text="Details")
-    deets_btn.grid(column=1, row=2)
+    deets_btn.grid(column=2, row=3)
     back_btn = ttk.Button(sub_disp, text="Back", command=back_button)
-    back_btn.grid(column=2, row=2)
+    back_btn.grid(column=3, row=3)
 
     # Image selection
     select_label = ttk.Label(sub_disp, text="Select:")
-    select_label.grid(column=0, row=3)
+    select_label.grid(column=0, row=2)
     image_choice = StringVar()
     image_choice_box = ttk.Combobox(sub_disp, textvariable=image_choice,
                                     postcommand=update_list_combobox)
-    image_choice_box.grid(column=1, row=3)
+    image_choice_box.grid(column=1, row=2)
     image_choice_box.state(["readonly"])
 
     return

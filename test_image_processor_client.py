@@ -16,6 +16,18 @@ def test_b64_string_to_ndarray():
     assert (answer == expected).all
 
 
+# def ndarray_to_tkinter_image(img_ndarray):
+#     f = io.BytesIO()
+#     imsave(f, img_ndarray, plugin="pil")
+#     out_img = io.BytesIO()
+#     out_img.write(f.getvalue())
+#     img_obj = Image.open(out_img)
+#     # img_obj = img_obj.resize((400, 400))
+#     pixel_size = img_obj.size
+#     tk_image = ImageTk.PhotoImage(img_obj)
+#     return tk_image, pixel_size
+
+
 def test_display_image():
     from image_processor_client import image_file_to_b64
     from image_processor_client import b64_string_to_ndarray
@@ -65,4 +77,13 @@ def test_image_file_to_b64_wrongfiletype():
     from image_processor_client import image_file_to_b64
     answer = image_file_to_b64("images/test.txt")
     expected = ""
+    assert answer == expected
+
+
+def test_create_deets_message():
+    from image_processor_client import create_deets_message
+    answer = create_deets_message("2020-04-24 00:38:15",
+                                  ("512", "512"), "acl2_inverted.jpg")
+    expected = "Time processed: 2020-04-24 00:38:15\n" \
+               "Image size: 512 x 512"
     assert answer == expected

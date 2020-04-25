@@ -305,7 +305,7 @@ def display_window(tk_image, image):
         image_choice_box['values'] = image_list
 
     def details_button():
-        get_details(image_choice.get())
+        time = get_details(image)
         return
 
     sub_disp = Toplevel()  # sets up main window
@@ -351,6 +351,7 @@ def get_details(image_name):
             .format(r.status_code, r.text)
         return failure_message
     else:
+        print(json.loads(r.text))
         return json.loads(r.text)
 
 

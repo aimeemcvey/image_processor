@@ -66,3 +66,12 @@ def test_image_file_to_b64_wrongfiletype():
     answer = image_file_to_b64("images/test.txt")
     expected = ""
     assert answer == expected
+
+
+def test_create_deets_message():
+    from image_processor_client import create_deets_message
+    answer = create_deets_message("2020-04-24 00:38:15",
+                                  ("512", "512"), "acl2_inverted.jpg")
+    expected = "Time processed: 2020-04-24 00:38:15\n" \
+               "Image size: 512 x 512"
+    assert answer == expected

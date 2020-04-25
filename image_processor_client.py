@@ -11,6 +11,8 @@ from matplotlib import pyplot as plt
 import binascii
 import os.path
 from os import path
+from PIL import Image, ImageTk
+from skimage.io import imsave
 
 server_name = "http://127.0.0.1:5000"
 
@@ -64,12 +66,10 @@ def main_window():
                                               icon="error")
                     return
                 if action.get() == "display":
-                    img_out = display_image(nd_to_disp)
-                    if img_out is False:
-                        messagebox.askretrycancel(title="Image Display "
-                                                        "Failure",
-                                                  message="Display failed",
-                                                  icon="error")
+                    # img_out = display_image(nd_to_disp)
+                    tk_image, pixel_size = ndarray_to_tkinter_image(nd_to_disp)
+                    display_window(tk_image, pixel_size, image_choice.get())
+                    return
                 if action.get() == "download":
                     f = create_filename(image_choice.get())
                     img_out = b64_to_image_file(b64_to_convert, f)
@@ -164,6 +164,18 @@ def b64_string_to_ndarray(b64_string):
     # check jpg and png differences
     img_ndarray = mpimg.imread(image_buf, format='JPG')
     return img_ndarray
+
+
+def ndarray_to_tkinter_image(img_ndarray):
+    f = io.BytesIO()
+    imsave(f, img_ndarray, plugin="pil")
+    out_img = io.BytesIO()
+    out_img.write(f.getvalue())
+    img_obj = Image.open(out_img)
+    # img_obj = img_obj.resize((400, 400))
+    pixel_size = img_obj.size
+    tk_image = ImageTk.PhotoImage(img_obj)
+    return tk_image, pixel_size
 
 
 def display_image(img_ndarray):
@@ -281,6 +293,79 @@ def upload_image(image_name, b64_str):
         return failure_message
     else:
         return True
+
+
+def display_window(tk_image, size, image):
+    def back_button():
+        sub_disp.destroy()
+        return
+
+    def update_list_combobox():
+        image_list = get_image_list()
+        image_choice_box['values'] = image_list
+
+    def details_button():
+        time = get_details(image)
+        deets_message = create_deets_message(time, size, image)
+        messagebox.showinfo(title="Image Details",
+                            message=deets_message)
+        return
+
+    sub_disp = Toplevel()  # sets up main window
+    sub_disp.title("Display")
+    sub_disp.columnconfigure(0, pad=8)
+    sub_disp.columnconfigure(1, pad=8)
+    sub_disp.columnconfigure(2, pad=8)
+    sub_disp.columnconfigure(3, pad=8)
+
+    # Add main label
+    top_label = ttk.Label(sub_disp, text="{}".format(image))
+    top_label.grid(column=1, row=0, columnspan=2)
+
+    image_label = ttk.Label(sub_disp, image=tk_image)
+    image_label.image = tk_image
+    image_label.grid(column=0, row=1, columnspan=4)
+
+    # Add buttons
+    compare_btn = ttk.Button(sub_disp, text="Compare")
+    compare_btn.grid(column=0, row=3)
+    deets_btn = ttk.Button(sub_disp, text="Details", command=details_button)
+    deets_btn.grid(column=2, row=3)
+    back_btn = ttk.Button(sub_disp, text="Back", command=back_button)
+    back_btn.grid(column=3, row=3)
+
+    # Image selection
+    select_label = ttk.Label(sub_disp, text="Select:")
+    select_label.grid(column=0, row=2)
+    image_choice = StringVar()
+    image_choice_box = ttk.Combobox(sub_disp, textvariable=image_choice,
+                                    postcommand=update_list_combobox)
+    image_choice_box.grid(column=1, row=2)
+    image_choice_box.state(["readonly"])
+
+    return
+
+
+def get_details(image_name):
+    r = requests.get(server_name + "/api/get_details/{}".format(image_name))
+    if r.status_code != 200:
+        failure_message = "Detail collection failed: {} - {}" \
+            .format(r.status_code, r.text)
+        return failure_message
+    else:
+        return json.loads(r.text)
+
+
+def create_deets_message(time, size, image):
+    if "inverted" in image:
+        time_type = "processed"
+    else:
+        time_type = "uploaded"
+    width, height = size
+    deets_message = "Time {}: {}\n" \
+                    "Image size: {} x {}" \
+        .format(time_type, time, width, height)
+    return deets_message
 
 
 if __name__ == "__main__":

@@ -23,7 +23,6 @@ class Image(MongoModel):
     upload_time = fields.CharField()
     processed_time = fields.CharField()
     # image_size = fields.ListField()
-    # processed_info = fields.ListField()
 
 
 @app.route("/api/upload_image", methods=["POST"])
@@ -205,6 +204,32 @@ def verify_name_input(image):
     if is_image_in_database(image) is False:
         return "Image {} does not exist in database".format(image)
     return True
+
+
+@app.route("/api/get_details/<image_name>", methods=["GET"])
+def get_im_details(image_name):
+    status = "og"
+    if "inverted" in image_name:
+        image_name = return_name(image_name)
+        status = "inv"
+    check_result = verify_name_input(image_name)
+    if check_result is not True:
+        return check_result, 400
+    if status is "inv":
+        im_details = locate_details(image_name, "inverted")
+    else:
+        im_details = locate_details(image_name)
+    return jsonify(im_details), 200
+
+
+def locate_details(im_name, which="orig"):
+    to_act = Image.objects.raw({"_id": im_name})
+    for doc in to_act:
+        if which is "orig":
+            im_deets = doc.upload_time
+        elif which is "inverted":
+            im_deets = doc.processed_time
+    return im_deets
 
 
 if __name__ == "__main__":

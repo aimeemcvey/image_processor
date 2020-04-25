@@ -11,6 +11,7 @@ from matplotlib import pyplot as plt
 import binascii
 import os.path
 from os import path
+import PIL
 from PIL import Image, ImageTk
 from skimage.io import imsave
 
@@ -171,8 +172,12 @@ def ndarray_to_tkinter_image(img_ndarray):
     out_img = io.BytesIO()
     out_img.write(f.getvalue())
     img_obj = Image.open(out_img)
-    # img_obj = img_obj.resize((400, 400))
     pixel_size = img_obj.size
+    # resize image but keep aspect ratio
+    mywidth = 512
+    wpercent = (mywidth / float(img_obj.size[0]))
+    hsize = int((float(img_obj.size[1]) * float(wpercent)))
+    img_obj = img_obj.resize((mywidth, hsize), PIL.Image.ANTIALIAS)
     tk_image = ImageTk.PhotoImage(img_obj)
     return tk_image, pixel_size
 

@@ -160,7 +160,6 @@ def fetch_b64(image_name):
 def b64_string_to_ndarray(b64_string):
     image_bytes = base64.b64decode(b64_string)
     image_buf = io.BytesIO(image_bytes)
-    # check jpg and png differences
     img_ndarray = mpimg.imread(image_buf, format='JPG')
     return img_ndarray
 
@@ -218,28 +217,28 @@ def upload_new_window():
                                 "Check image spelling and extension type " \
                                 "and ensure image is in the /images " \
                                 "directory".format(image_name)
-            response = messagebox.showerror(title="File Not Found",
-                                            message=not_found_message,
-                                            icon="error")
+            messagebox.showerror(title="File Not Found",
+                                 message=not_found_message,
+                                 icon="error")
             return
         elif not b64_str:  # not an image
             not_image_message = "{} is not a supported filetype. " \
                                 "Please select an image.".format(image_name)
-            response = messagebox.showerror(title="File Not Supported",
-                                            message=not_image_message,
-                                            icon="error")
+            messagebox.showerror(title="File Not Supported",
+                                 message=not_image_message,
+                                 icon="error")
             return
         else:
             upload_out = upload_image(image_name, b64_str)
             if upload_out is True:
                 success_message = "Image uploaded successfully"
-                response = messagebox.showinfo(title="Upload Success",
-                                               message=success_message)
+                messagebox.showinfo(title="Upload Success",
+                                    message=success_message)
                 sub_upload.destroy()
             else:
-                response = messagebox.askretrycancel(title="Upload Failure",
-                                                     message=upload_out,
-                                                     icon="error")
+                messagebox.askretrycancel(title="Upload Failure",
+                                          message=upload_out,
+                                          icon="error")
         return
 
     def back_button():

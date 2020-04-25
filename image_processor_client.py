@@ -321,10 +321,10 @@ def display_window(tk_image, image):
     image_label.grid(column=0, row=1, columnspan=2)
 
     # Add buttons
-    upload_btn = ttk.Button(sub_disp, text="Upload")  #, command=upload_button)
-    upload_btn.grid(column=0, row=6)
+    compare_btn = ttk.Button(sub_disp, text="Compare")  #, command=upload_button)
+    compare_btn.grid(column=0, row=2)
     back_btn = ttk.Button(sub_disp, text="Back", command=back_button)
-    back_btn.grid(column=1, row=6)
+    back_btn.grid(column=1, row=2)
 
     return
 

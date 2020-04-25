@@ -149,7 +149,6 @@ def invert_image(image_name):
 
 def fetch_b64(image_name):
     r = requests.get(server_name + "/api/fetch_b64/{}".format(image_name))
-    print(image_name)
     if r.status_code != 200:
         failure_message = "Image collection failed: {} - {}" \
             .format(r.status_code, r.text)
@@ -212,7 +211,6 @@ def b64_to_image_file(b64, new_filename):
 def upload_new_window():
     def upload_button():
         image_name = image_selection.get()
-        print("You've selected {}".format(image_name))
         image_entry.delete(0, 'end')
         b64_str = image_file_to_b64("images/{}".format(image_name))
         if b64_str is False:  # file not found

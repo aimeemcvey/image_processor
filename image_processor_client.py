@@ -67,8 +67,8 @@ def main_window():
                     return
                 if action.get() == "display":
                     # img_out = display_image(nd_to_disp)
-                    tk_image = ndarray_to_tkinter_image(nd_to_disp)
-                    display_window(tk_image, image_choice.get())
+                    tk_image, pixel_size = ndarray_to_tkinter_image(nd_to_disp)
+                    display_window(tk_image, pixel_size, image_choice.get())
                     return
                 if action.get() == "download":
                     f = create_filename(image_choice.get())
@@ -172,9 +172,10 @@ def ndarray_to_tkinter_image(img_ndarray):
     out_img = io.BytesIO()
     out_img.write(f.getvalue())
     img_obj = Image.open(out_img)
-    img_obj = img_obj.resize((400, 400))
+    # img_obj = img_obj.resize((400, 400))
+    pixel_size = img_obj.size
     tk_image = ImageTk.PhotoImage(img_obj)
-    return tk_image
+    return tk_image, pixel_size
 
 
 def display_image(img_ndarray):
@@ -294,7 +295,7 @@ def upload_image(image_name, b64_str):
         return True
 
 
-def display_window(tk_image, image):
+def display_window(tk_image, size, image):
 
     def back_button():
         sub_disp.destroy()
@@ -306,6 +307,7 @@ def display_window(tk_image, image):
 
     def details_button():
         time = get_details(image)
+        width, height = size
         return
 
     sub_disp = Toplevel()  # sets up main window

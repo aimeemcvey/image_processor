@@ -90,7 +90,7 @@ def main_window():
     root.columnconfigure(2, pad=8)
 
     # Add main label
-    top_label = ttk.Label(root, text="Image Processor")
+    top_label = ttk.Label(root, text="Image Processor", font='Helvetica 10 bold')
     top_label.grid(column=0, row=0, columnspan=2, sticky=W)
 
     # Image selection
@@ -252,7 +252,7 @@ def upload_new_window():
     sub_upload.columnconfigure(2, pad=8)
 
     # Add main label
-    top_label = ttk.Label(sub_upload, text="Upload New")
+    top_label = ttk.Label(sub_upload, text="Upload New", font='Helvetica 10 bold')
     top_label.grid(column=0, row=0, columnspan=2, sticky=W)
 
     # Image selection
@@ -325,7 +325,7 @@ def display_window(tk_image, size, image):
                                           icon="error")
                 return
             tk_image2, pixel_size = ndarray_to_tkinter_image(nd_to_disp)
-            compare_window(tk_image, tk_image2)
+            compare_window(image, tk_image, image_choice.get(), tk_image2)
         return
 
     sub_disp = Toplevel()  # sets up main window
@@ -336,7 +336,7 @@ def display_window(tk_image, size, image):
     sub_disp.columnconfigure(3, pad=8)
 
     # Add main label
-    top_label = ttk.Label(sub_disp, text="{}".format(image))
+    top_label = ttk.Label(sub_disp, text="{}".format(image), font='Helvetica 10 bold')
     top_label.grid(column=1, row=0, columnspan=2)
 
     image_label = ttk.Label(sub_disp, image=tk_image)
@@ -385,7 +385,7 @@ def create_deets_message(time, size, image):
     return deets_message
 
 
-def compare_window(tk_image1, tk_image2):
+def compare_window(name1, tk_image1, name2, tk_image2):
     def back_button():
         sub_comp.destroy()
         return
@@ -397,6 +397,13 @@ def compare_window(tk_image1, tk_image2):
     sub_comp.columnconfigure(2, pad=8)
     sub_comp.columnconfigure(3, pad=8)
 
+    # Top Labels
+    top_label1 = ttk.Label(sub_comp, text="{}".format(name1), font='Helvetica 10 bold')
+    top_label1.grid(column=0, row=0, columnspan=2)
+    top_label2 = ttk.Label(sub_comp, text="{}".format(name2), font='Helvetica 10 bold')
+    top_label2.grid(column=2, row=0, columnspan=2)
+
+    # Images
     image_label = ttk.Label(sub_comp, image=tk_image1)
     image_label.image = tk_image1
     image_label.grid(column=0, row=1, columnspan=2)

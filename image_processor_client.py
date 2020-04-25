@@ -90,7 +90,8 @@ def main_window():
     root.columnconfigure(2, pad=8)
 
     # Add main label
-    top_label = ttk.Label(root, text="Image Processor")
+    top_label = ttk.Label(root, text="Image Processor",
+                          font='Helvetica 10 bold')
     top_label.grid(column=0, row=0, columnspan=2, sticky=W)
 
     # Image selection
@@ -149,7 +150,6 @@ def invert_image(image_name):
 
 def fetch_b64(image_name):
     r = requests.get(server_name + "/api/fetch_b64/{}".format(image_name))
-    print(image_name)
     if r.status_code != 200:
         failure_message = "Image collection failed: {} - {}" \
             .format(r.status_code, r.text)
@@ -161,7 +161,6 @@ def fetch_b64(image_name):
 def b64_string_to_ndarray(b64_string):
     image_bytes = base64.b64decode(b64_string)
     image_buf = io.BytesIO(image_bytes)
-    # check jpg and png differences
     img_ndarray = mpimg.imread(image_buf, format='JPG')
     return img_ndarray
 
@@ -212,7 +211,6 @@ def b64_to_image_file(b64, new_filename):
 def upload_new_window():
     def upload_button():
         image_name = image_selection.get()
-        print("You've selected {}".format(image_name))
         image_entry.delete(0, 'end')
         b64_str = image_file_to_b64("images/{}".format(image_name))
         if b64_str is False:  # file not found
@@ -220,28 +218,28 @@ def upload_new_window():
                                 "Check image spelling and extension type " \
                                 "and ensure image is in the /images " \
                                 "directory".format(image_name)
-            response = messagebox.showerror(title="File Not Found",
-                                            message=not_found_message,
-                                            icon="error")
+            messagebox.showerror(title="File Not Found",
+                                 message=not_found_message,
+                                 icon="error")
             return
         elif not b64_str:  # not an image
             not_image_message = "{} is not a supported filetype. " \
                                 "Please select an image.".format(image_name)
-            response = messagebox.showerror(title="File Not Supported",
-                                            message=not_image_message,
-                                            icon="error")
+            messagebox.showerror(title="File Not Supported",
+                                 message=not_image_message,
+                                 icon="error")
             return
         else:
             upload_out = upload_image(image_name, b64_str)
             if upload_out is True:
                 success_message = "Image uploaded successfully"
-                response = messagebox.showinfo(title="Upload Success",
-                                               message=success_message)
+                messagebox.showinfo(title="Upload Success",
+                                    message=success_message)
                 sub_upload.destroy()
             else:
-                response = messagebox.askretrycancel(title="Upload Failure",
-                                                     message=upload_out,
-                                                     icon="error")
+                messagebox.askretrycancel(title="Upload Failure",
+                                          message=upload_out,
+                                          icon="error")
         return
 
     def back_button():
@@ -255,7 +253,8 @@ def upload_new_window():
     sub_upload.columnconfigure(2, pad=8)
 
     # Add main label
-    top_label = ttk.Label(sub_upload, text="Upload New")
+    top_label = ttk.Label(sub_upload, text="Upload New",
+                          font='Helvetica 10 bold')
     top_label.grid(column=0, row=0, columnspan=2, sticky=W)
 
     # Image selection
@@ -311,6 +310,26 @@ def display_window(tk_image, size, image):
                             message=deets_message)
         return
 
+    def compare_button():
+        if image_choice.get() == "":
+            no_selection_message = "Please select an image to " \
+                                   "compare with."
+            messagebox.showerror(title="Selection Error",
+                                 message=no_selection_message,
+                                 icon="error")
+        else:
+            b64_to_convert = fetch_b64(image_choice.get())
+            try:
+                nd_to_disp = b64_string_to_ndarray(b64_to_convert)
+            except binascii.Error:
+                messagebox.askretrycancel(title="Failure to Find Image",
+                                          message=b64_to_convert,
+                                          icon="error")
+                return
+            tk_image2, pixel_size = ndarray_to_tkinter_image(nd_to_disp)
+            compare_window(image, tk_image, image_choice.get(), tk_image2)
+        return
+
     sub_disp = Toplevel()  # sets up main window
     sub_disp.title("Display")
     sub_disp.columnconfigure(0, pad=8)
@@ -319,7 +338,8 @@ def display_window(tk_image, size, image):
     sub_disp.columnconfigure(3, pad=8)
 
     # Add main label
-    top_label = ttk.Label(sub_disp, text="{}".format(image))
+    top_label = ttk.Label(sub_disp, text="{}".format(image),
+                          font='Helvetica 10 bold')
     top_label.grid(column=1, row=0, columnspan=2)
 
     image_label = ttk.Label(sub_disp, image=tk_image)
@@ -327,7 +347,7 @@ def display_window(tk_image, size, image):
     image_label.grid(column=0, row=1, columnspan=4)
 
     # Add buttons
-    compare_btn = ttk.Button(sub_disp, text="Compare")
+    compare_btn = ttk.Button(sub_disp, text="Compare", command=compare_button)
     compare_btn.grid(column=0, row=3)
     deets_btn = ttk.Button(sub_disp, text="Details", command=details_button)
     deets_btn.grid(column=2, row=3)
@@ -366,6 +386,41 @@ def create_deets_message(time, size, image):
                     "Image size: {} x {}" \
         .format(time_type, time, width, height)
     return deets_message
+
+
+def compare_window(name1, tk_image1, name2, tk_image2):
+    def back_button():
+        sub_comp.destroy()
+        return
+
+    sub_comp = Toplevel()  # sets up main window
+    sub_comp.title("Compare")
+    sub_comp.columnconfigure(0, pad=8)
+    sub_comp.columnconfigure(1, pad=8)
+    sub_comp.columnconfigure(2, pad=8)
+    sub_comp.columnconfigure(3, pad=8)
+
+    # Top Labels
+    top_label1 = ttk.Label(sub_comp, text="{}".format(name1),
+                           font='Helvetica 10 bold')
+    top_label1.grid(column=0, row=0, columnspan=2)
+    top_label2 = ttk.Label(sub_comp, text="{}".format(name2),
+                           font='Helvetica 10 bold')
+    top_label2.grid(column=2, row=0, columnspan=2)
+
+    # Images
+    image_label = ttk.Label(sub_comp, image=tk_image1)
+    image_label.image = tk_image1
+    image_label.grid(column=0, row=1, columnspan=2)
+    image_label2 = ttk.Label(sub_comp, image=tk_image2)
+    image_label2.image = tk_image2
+    image_label2.grid(column=2, row=1, columnspan=2)
+
+    # Add buttons
+    back_btn = ttk.Button(sub_comp, text="Back", command=back_button)
+    back_btn.grid(column=1, row=3, columnspan=2)
+
+    return
 
 
 if __name__ == "__main__":

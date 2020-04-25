@@ -11,6 +11,8 @@ from matplotlib import pyplot as plt
 import binascii
 import os.path
 from os import path
+from PIL import Image, ImageTk
+from skimage.io import imsave
 
 server_name = "http://127.0.0.1:5000"
 
@@ -64,12 +66,13 @@ def main_window():
                                               icon="error")
                     return
                 if action.get() == "display":
-                    img_out = display_image(nd_to_disp)
-                    if img_out is False:
-                        messagebox.askretrycancel(title="Image Display "
-                                                        "Failure",
-                                                  message="Display failed",
-                                                  icon="error")
+                    # img_out = display_image(nd_to_disp)
+                    img_out = ndarray_to_tkinter_image(nd_to_disp)
+                    # if img_out is False:
+                    #     messagebox.askretrycancel(title="Image Display "
+                    #                                     "Failure",
+                    #                               message="Display failed",
+                    #                               icon="error")
                 if action.get() == "download":
                     f = create_filename(image_choice.get())
                     img_out = b64_to_image_file(b64_to_convert, f)
@@ -164,6 +167,16 @@ def b64_string_to_ndarray(b64_string):
     # check jpg and png differences
     img_ndarray = mpimg.imread(image_buf, format='JPG')
     return img_ndarray
+
+
+def ndarray_to_tkinter_image(img_ndarray):
+    f = io.BytesIO()
+    imsave(f, img_ndarray, plugin="pil")
+    out_img = io.BytesIO()
+    out_img.write(f.getvalue())
+    img_obj = Image.open(out_img)
+    tk_image = ImageTk.PhotoImage(img_obj)
+    return tk_image
 
 
 def display_image(img_ndarray):

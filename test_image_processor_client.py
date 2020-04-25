@@ -16,16 +16,19 @@ def test_b64_string_to_ndarray():
     assert (answer == expected).all
 
 
-# def ndarray_to_tkinter_image(img_ndarray):
-#     f = io.BytesIO()
-#     imsave(f, img_ndarray, plugin="pil")
-#     out_img = io.BytesIO()
-#     out_img.write(f.getvalue())
-#     img_obj = Image.open(out_img)
-#     # img_obj = img_obj.resize((400, 400))
-#     pixel_size = img_obj.size
-#     tk_image = ImageTk.PhotoImage(img_obj)
-#     return tk_image, pixel_size
+def test_ndarray_to_tkinter_image():
+    from image_processor_client import image_file_to_b64
+    from image_processor_client import b64_string_to_ndarray
+    from image_processor_client import ndarray_to_tkinter_image
+    from PIL import Image, ImageTk
+    from tkinter import Tk
+    test = Tk()
+    b64 = image_file_to_b64("images/acl2_test.jpg")
+    nd = b64_string_to_ndarray(b64)
+    ans1, ans2 = ndarray_to_tkinter_image(nd)
+    test.destroy()
+    expected = 512, 512
+    assert ans2 == expected
 
 
 def test_display_image():

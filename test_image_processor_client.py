@@ -27,6 +27,20 @@ def test_display_image():
     assert answer == expected
 
 
+def test_create_filename():
+    from image_processor_client import create_filename
+    answer = create_filename("acl1.jpg")
+    expected = "images/acl1_1.jpg"
+    assert answer == expected
+#
+#
+# def b64_to_image_file(b64, new_filename):
+#     image_bytes = base64.b64decode(b64)
+#     with open(new_filename, "wb") as out_file:
+#         out_file.write(image_bytes)
+#     return True
+
+
 def test_image_file_to_b64_exists():
     from image_processor_client import image_file_to_b64
     answer = image_file_to_b64("images/acl1.jpg")

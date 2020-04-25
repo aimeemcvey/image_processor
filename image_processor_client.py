@@ -90,7 +90,8 @@ def main_window():
     root.columnconfigure(2, pad=8)
 
     # Add main label
-    top_label = ttk.Label(root, text="Image Processor", font='Helvetica 10 bold')
+    top_label = ttk.Label(root, text="Image Processor",
+                          font='Helvetica 10 bold')
     top_label.grid(column=0, row=0, columnspan=2, sticky=W)
 
     # Image selection
@@ -252,7 +253,8 @@ def upload_new_window():
     sub_upload.columnconfigure(2, pad=8)
 
     # Add main label
-    top_label = ttk.Label(sub_upload, text="Upload New", font='Helvetica 10 bold')
+    top_label = ttk.Label(sub_upload, text="Upload New",
+                          font='Helvetica 10 bold')
     top_label.grid(column=0, row=0, columnspan=2, sticky=W)
 
     # Image selection
@@ -336,7 +338,8 @@ def display_window(tk_image, size, image):
     sub_disp.columnconfigure(3, pad=8)
 
     # Add main label
-    top_label = ttk.Label(sub_disp, text="{}".format(image), font='Helvetica 10 bold')
+    top_label = ttk.Label(sub_disp, text="{}".format(image),
+                          font='Helvetica 10 bold')
     top_label.grid(column=1, row=0, columnspan=2)
 
     image_label = ttk.Label(sub_disp, image=tk_image)
@@ -398,9 +401,11 @@ def compare_window(name1, tk_image1, name2, tk_image2):
     sub_comp.columnconfigure(3, pad=8)
 
     # Top Labels
-    top_label1 = ttk.Label(sub_comp, text="{}".format(name1), font='Helvetica 10 bold')
+    top_label1 = ttk.Label(sub_comp, text="{}".format(name1),
+                           font='Helvetica 10 bold')
     top_label1.grid(column=0, row=0, columnspan=2)
-    top_label2 = ttk.Label(sub_comp, text="{}".format(name2), font='Helvetica 10 bold')
+    top_label2 = ttk.Label(sub_comp, text="{}".format(name2),
+                           font='Helvetica 10 bold')
     top_label2.grid(column=2, row=0, columnspan=2)
 
     # Images

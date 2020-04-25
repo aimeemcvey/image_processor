@@ -9,6 +9,8 @@ import matplotlib.image as mpimg
 import json
 from matplotlib import pyplot as plt
 import binascii
+import os.path
+from os import path
 
 server_name = "http://127.0.0.1:5000"
 
@@ -52,8 +54,7 @@ def main_window():
                                               message=invert_out,
                                               icon="error")
                     return
-            elif action.get() == "display":
-                print("going to display")
+            else:
                 b64_to_convert = fetch_b64(image_choice.get())
                 try:
                     nd_to_disp = b64_string_to_ndarray(b64_to_convert)
@@ -62,11 +63,20 @@ def main_window():
                                               message=b64_to_convert,
                                               icon="error")
                     return
-                img_out = display_image(nd_to_disp)
-                if img_out is False:
-                    messagebox.askretrycancel(title="Image Display Failure",
-                                              message="Display failed",
-                                              icon="error")
+                if action.get() == "display":
+                    img_out = display_image(nd_to_disp)
+                    if img_out is False:
+                        messagebox.askretrycancel(title="Image Display "
+                                                        "Failure",
+                                                  message="Display failed",
+                                                  icon="error")
+                if action.get() == "download":
+                    f = create_filename(image_choice.get())
+                    img_out = b64_to_image_file(b64_to_convert, f)
+                    if img_out is True:
+                        success_message = "Image downloaded successfully"
+                        messagebox.showinfo(title="Download Success",
+                                            message=success_message)
         return
 
     def update_list_combobox():
@@ -165,6 +175,28 @@ def display_image(img_ndarray):
     return True
 
 
+def create_filename(filename):
+    new_filename = "images/{}".format(filename)
+    found = True
+    i = 0
+    stem, ext = new_filename.split('.')
+    while found is True:
+        if i == 0:
+            found = path.exists(new_filename)
+        else:
+            found = path.exists(stem + "_" + str(i) + "." + ext)
+            new_filename = stem + "_" + str(i) + "." + ext
+        i += 1
+    return new_filename
+
+
+def b64_to_image_file(b64, new_filename):
+    image_bytes = base64.b64decode(b64)
+    with open(new_filename, "wb") as out_file:
+        out_file.write(image_bytes)
+    return True
+
+
 def upload_new_window():
     def upload_button():
         image_name = image_selection.get()
@@ -175,7 +207,7 @@ def upload_new_window():
             not_found_message = "{} could not be found. \n" \
                                 "Check image spelling and extension type " \
                                 "and ensure image is in the /images " \
-                                "directory" .format(image_name)
+                                "directory".format(image_name)
             response = messagebox.showerror(title="File Not Found",
                                             message=not_found_message,
                                             icon="error")

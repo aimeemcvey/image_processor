@@ -300,6 +300,10 @@ def display_window(tk_image, image):
         sub_disp.destroy()
         return
 
+    def update_list_combobox():
+        image_list = get_image_list()
+        image_choice_box['values'] = image_list
+
     sub_disp = Toplevel()  # sets up main window
     sub_disp.title("Display")
     sub_disp.columnconfigure(0, pad=8)
@@ -308,24 +312,28 @@ def display_window(tk_image, image):
 
     # Add main label
     top_label = ttk.Label(sub_disp, text="{}".format(image))
-    top_label.grid(column=0, row=0, columnspan=2, sticky=W)
-
-    # Image selection
-    select_label = ttk.Label(sub_disp, text="Choose an image:")
-    select_label.grid(column=0, row=3)
-    image_selection = StringVar()
-    image_entry = ttk.Entry(sub_disp, textvariable=image_selection, width=30)
-    image_entry.grid(column=1, row=3)
+    top_label.grid(column=1, row=0, columnspan=2, sticky=W)
 
     image_label = ttk.Label(sub_disp, image=tk_image)
     image_label.image = tk_image
-    image_label.grid(column=0, row=1, columnspan=2)
+    image_label.grid(column=0, row=1, columnspan=3)
 
     # Add buttons
-    compare_btn = ttk.Button(sub_disp, text="Compare")  #, command=upload_button)
+    compare_btn = ttk.Button(sub_disp, text="Compare")
     compare_btn.grid(column=0, row=2)
+    deets_btn = ttk.Button(sub_disp, text="Details")
+    deets_btn.grid(column=1, row=2)
     back_btn = ttk.Button(sub_disp, text="Back", command=back_button)
-    back_btn.grid(column=1, row=2)
+    back_btn.grid(column=2, row=2)
+
+    # Image selection
+    select_label = ttk.Label(sub_disp, text="Select:")
+    select_label.grid(column=0, row=3)
+    image_choice = StringVar()
+    image_choice_box = ttk.Combobox(sub_disp, textvariable=image_choice,
+                                    postcommand=update_list_combobox)
+    image_choice_box.grid(column=1, row=3)
+    image_choice_box.state(["readonly"])
 
     return
 

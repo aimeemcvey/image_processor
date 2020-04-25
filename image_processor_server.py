@@ -22,7 +22,6 @@ class Image(MongoModel):
     image_formats = fields.DictField()
     upload_time = fields.CharField()
     processed_time = fields.CharField()
-    # image_size = fields.ListField()
 
 
 @app.route("/api/upload_image", methods=["POST"])
@@ -64,7 +63,7 @@ def add_image_to_db(in_dict):
     new_image = Image(image_name=in_dict["image"],
                       image_formats={"b64_str": in_dict["b64_string"]},
                       upload_time=timestamp)
-    x = new_image.save()
+    new_image.save()
     return new_image.image_name
 
 
@@ -141,17 +140,12 @@ def locate_b64_string(im_name, which="orig"):
 def b64_string_to_ndarray(b64_string):
     image_bytes = base64.b64decode(b64_string)
     image_buf = io.BytesIO(image_bytes)
-    # check jpg and png differences
     img_ndarray = mpimg.imread(image_buf, format='JPG')
-    # plt.imshow(img_ndarray, interpolation="nearest")
-    # plt.show()
     return img_ndarray
 
 
 def process_image_inversion(ndarray):
     inverted_nd = util.invert(ndarray)
-    # plt.imshow(inverted_nd, interpolation="nearest")
-    # plt.show()
     return inverted_nd
 
 
@@ -186,12 +180,10 @@ def get_b64_from_db(image_name):
         b64_to_disp = locate_b64_string(image_name, "inverted")
     else:
         b64_to_disp = locate_b64_string(image_name)
-        print("this image is not")
     return jsonify(b64_to_disp), 200
 
 
 def return_name(image_name):
-    print("this image is inverted")
     whole_stem, ext = image_name.split('.')
     stem, inv = whole_stem.split('_')
     image_name = stem + "." + ext

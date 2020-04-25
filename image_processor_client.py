@@ -173,13 +173,18 @@ def ndarray_to_tkinter_image(img_ndarray):
     out_img.write(f.getvalue())
     img_obj = Image.open(out_img)
     pixel_size = img_obj.size
+    img_obj = resize_image(img_obj)
+    tk_image = ImageTk.PhotoImage(img_obj)
+    return tk_image, pixel_size
+
+
+def resize_image(img_obj):
     # resize image but keep aspect ratio
     mywidth = 512
     wpercent = (mywidth / float(img_obj.size[0]))
     hsize = int((float(img_obj.size[1]) * float(wpercent)))
     img_obj = img_obj.resize((mywidth, hsize), PIL.Image.ANTIALIAS)
-    tk_image = ImageTk.PhotoImage(img_obj)
-    return tk_image, pixel_size
+    return img_obj
 
 
 def display_image(img_ndarray):

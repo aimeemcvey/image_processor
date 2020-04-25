@@ -70,7 +70,8 @@ def main_window():
                                                   message="Display failed",
                                                   icon="error")
                 if action.get() == "download":
-                    img_out = b64_to_image_file(b64_to_convert, image_choice.get())
+                    f = create_filename(image_choice.get())
+                    img_out = b64_to_image_file(b64_to_convert, f)
                     if img_out is True:
                         success_message = "Image downloaded successfully"
                         messagebox.showinfo(title="Download Success",
@@ -173,7 +174,7 @@ def display_image(img_ndarray):
     return True
 
 
-def b64_to_image_file(b64, filename):
+def create_filename(filename):
     new_filename = "images/{}".format(filename)
     found = True
     i = 0
@@ -185,6 +186,10 @@ def b64_to_image_file(b64, filename):
             found = path.exists(stem + "_" + str(i) + "." + ext)
             new_filename = stem + "_" + str(i) + "." + ext
         i += 1
+    return new_filename
+
+
+def b64_to_image_file(b64, new_filename):
     image_bytes = base64.b64decode(b64)
     with open(new_filename, "wb") as out_file:
         out_file.write(image_bytes)

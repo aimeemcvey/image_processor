@@ -296,7 +296,6 @@ def upload_image(image_name, b64_str):
 
 
 def display_window(tk_image, size, image):
-
     def back_button():
         sub_disp.destroy()
         return
@@ -307,7 +306,9 @@ def display_window(tk_image, size, image):
 
     def details_button():
         time = get_details(image)
-        width, height = size
+        deets_message = create_deets_message(time, size, image)
+        messagebox.showinfo(title="Image Details",
+                            message=deets_message)
         return
 
     sub_disp = Toplevel()  # sets up main window
@@ -347,14 +348,24 @@ def display_window(tk_image, size, image):
 
 def get_details(image_name):
     r = requests.get(server_name + "/api/get_details/{}".format(image_name))
-    print(image_name)
     if r.status_code != 200:
         failure_message = "Detail collection failed: {} - {}" \
             .format(r.status_code, r.text)
         return failure_message
     else:
-        print(json.loads(r.text))
         return json.loads(r.text)
+
+
+def create_deets_message(time, size, image):
+    if "inverted" in image:
+        time_type = "processed"
+    else:
+        time_type = "uploaded"
+    width, height = size
+    deets_message = "Time {}: {}\n" \
+                    "Image size: {} x {}" \
+        .format(time_type, time, width, height)
+    return deets_message
 
 
 if __name__ == "__main__":

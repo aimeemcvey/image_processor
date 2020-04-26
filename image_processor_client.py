@@ -224,12 +224,11 @@ def upload_new_window():
         image_name = image_selection.get()
         filepath = browse_button.filename
         image_entry.delete(0, 'end')
-        b64_str = image_file_to_b64("images/{}".format(image_name))
+        b64_str = image_file_to_b64("{}".format(filepath))
         if b64_str is False:  # file not found
             not_found_message = "{} could not be found. \n" \
-                                "Check image spelling and extension type " \
-                                "and ensure image is in the /images " \
-                                "directory".format(image_name)
+                                "Check image spelling and extension " \
+                                "type".format(image_name)
             messagebox.showerror(title="File Not Found",
                                  message=not_found_message,
                                  icon="error")

@@ -2,6 +2,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+from tkinter import filedialog
 import requests
 import base64
 import io
@@ -11,6 +12,7 @@ from matplotlib import pyplot as plt
 import binascii
 import os.path
 from os import path
+import PIL
 from PIL import Image, ImageTk
 from skimage.io import imsave
 
@@ -171,10 +173,19 @@ def ndarray_to_tkinter_image(img_ndarray):
     out_img = io.BytesIO()
     out_img.write(f.getvalue())
     img_obj = Image.open(out_img)
-    # img_obj = img_obj.resize((400, 400))
     pixel_size = img_obj.size
+    img_obj = resize_image(img_obj)
     tk_image = ImageTk.PhotoImage(img_obj)
     return tk_image, pixel_size
+
+
+def resize_image(img_obj):
+    # resize image but keep aspect ratio
+    mywidth = 512
+    wpercent = (mywidth / float(img_obj.size[0]))
+    hsize = int((float(img_obj.size[1]) * float(wpercent)))
+    img_obj = img_obj.resize((mywidth, hsize), PIL.Image.ANTIALIAS)
+    return img_obj
 
 
 def display_image(img_ndarray):
@@ -211,13 +222,13 @@ def b64_to_image_file(b64, new_filename):
 def upload_new_window():
     def upload_button():
         image_name = image_selection.get()
+        filepath = browse_button.filename
         image_entry.delete(0, 'end')
-        b64_str = image_file_to_b64("images/{}".format(image_name))
+        b64_str = image_file_to_b64("{}".format(filepath))
         if b64_str is False:  # file not found
             not_found_message = "{} could not be found. \n" \
-                                "Check image spelling and extension type " \
-                                "and ensure image is in the /images " \
-                                "directory".format(image_name)
+                                "Check image spelling and extension " \
+                                "type".format(image_name)
             messagebox.showerror(title="File Not Found",
                                  message=not_found_message,
                                  icon="error")
@@ -240,7 +251,25 @@ def upload_new_window():
                 messagebox.askretrycancel(title="Upload Failure",
                                           message=upload_out,
                                           icon="error")
+                upload_btn["state"] = "disabled"
         return
+
+    def browse_button():
+        path = filedialog.askopenfilename(initialdir=os.getcwd() + "/images",
+                                          parent=sub_upload,
+                                          title='Select file',
+                                          filetypes=(("JPG files", "*.jpg"),
+                                                     ("JPEG files", "*.jpeg"),
+                                                     ("PNG files", "*.png"),
+                                                     ("All files", "*.*")))
+        if path is not None:
+            upload_btn["state"] = "normal"
+            im_name = path.split('/')
+            im_name = im_name[-1]
+            image_entry.delete(0, END)
+            image_entry.insert(0, im_name)
+        browse_button.filename = path
+        return browse_button.filename
 
     def back_button():
         sub_upload.destroy()
@@ -251,6 +280,7 @@ def upload_new_window():
     sub_upload.columnconfigure(0, pad=8)
     sub_upload.columnconfigure(1, pad=8)
     sub_upload.columnconfigure(2, pad=8)
+    sub_upload.rowconfigure(1, pad=5)
 
     # Add main label
     top_label = ttk.Label(sub_upload, text="Upload New",
@@ -265,10 +295,13 @@ def upload_new_window():
     image_entry.grid(column=1, row=1)
 
     # Add buttons
+    browse_btn = ttk.Button(sub_upload, text="Browse", command=browse_button)
+    browse_btn.grid(column=2, row=1)
     upload_btn = ttk.Button(sub_upload, text="Upload", command=upload_button)
-    upload_btn.grid(column=0, row=6)
+    upload_btn.grid(column=1, row=2)
+    upload_btn["state"] = "disabled"
     back_btn = ttk.Button(sub_upload, text="Back", command=back_button)
-    back_btn.grid(column=1, row=6)
+    back_btn.grid(column=2, row=2, columnspan=2)
 
     return
 

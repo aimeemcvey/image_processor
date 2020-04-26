@@ -222,6 +222,7 @@ def b64_to_image_file(b64, new_filename):
 def upload_new_window():
     def upload_button():
         image_name = image_selection.get()
+        filepath = browse_button.filename
         image_entry.delete(0, 'end')
         b64_str = image_file_to_b64("images/{}".format(image_name))
         if b64_str is False:  # file not found
@@ -266,8 +267,8 @@ def upload_new_window():
             im_name = im_name[-1]
             image_entry.delete(0, END)
             image_entry.insert(0, im_name)
-        print(filename)
-        return filename
+        browse_button.filename = filename
+        return browse_button.filename
 
     def back_button():
         sub_upload.destroy()
@@ -291,7 +292,6 @@ def upload_new_window():
     image_selection = StringVar()
     image_entry = ttk.Entry(sub_upload, textvariable=image_selection, width=30)
     image_entry.grid(column=1, row=1)
-    image_entry.state(["readonly"])
 
     # Add buttons
     browse_btn = ttk.Button(sub_upload, text="Browse", command=browse_button)

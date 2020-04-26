@@ -23,15 +23,46 @@ server_name = "http://127.0.0.1:5000"
 
 
 def main_window():
+    """Main window with image selection and action options
+    The main window allows the user to select an image from those
+    available in the database for inversion, display, or download.
+    From here, a user can open the upload window as well.
+    Args:
+        None
+    Returns:
+        None
+    """
     def upload_new():
+        """The Upload New button opens upload new image window
+        Args:
+            None
+        Returns:
+            None
+        """
         upload_new_window()
         return
 
     def cancel_button():
+        """The Cancel button closes the main window
+        Args:
+            None
+        Returns:
+            None
+        """
         root.destroy()
         return
 
     def ok_button():
+        """The Ok button implements the chosen action on the image
+        If no image is selected, an error message is displayed. If
+        any action is selection with an image, a confirmation window
+        appears. Each radiobutton will implement the action next to
+        the selection.
+        Args:
+            None
+        Returns:
+            None
+        """
         if image_choice.get() == "":
             no_selection_message = "Please select an image."
             messagebox.showerror(title="Selection Error",
@@ -81,6 +112,15 @@ def main_window():
         return
 
     def update_list_combobox():
+        """When down arrow of the combobox selected, image list updated
+        The combobox is continually populated with images available for
+        action in the database. Each time the box is selected, the list
+        is updated via a get request to the server.
+        Args:
+            None
+        Returns:
+            None
+        """
         image_list = get_image_list()
         image_choice_box['values'] = image_list
 
@@ -283,7 +323,25 @@ def b64_to_image_file(b64, new_filename):
 
 
 def upload_new_window():
+    """Upload New window allows image to be selected and uploaded
+    An image can be selected from anywhere on the computer for
+    upload to the cloud server. The Upload button is inactivated
+    until an image is selected via the Browse button.
+    Args:
+        None
+    Returns:
+        None
+    """
     def upload_button():
+        """Converts image to b64 str and uploads to database
+        The Upload button checks that the image can be located
+        and that the selection is an image file type. The image
+        and corresponding b64 str are then uploaded.
+        Args:
+            None
+        Returns:
+            None
+        """
         image_name = image_selection.get()
         filepath = browse_button.filename
         image_entry.delete(0, 'end')
@@ -318,6 +376,15 @@ def upload_new_window():
         return
 
     def browse_button():
+        """Opens file directory for image selection and returns path
+        The Browse button allows the user to select an image from
+        the computer for upload. The path to this image is then stored
+        for later access, and the Upload button is enabled.
+        Args:
+            None
+        Returns:
+            str: file path
+        """
         path = filedialog.askopenfilename(initialdir=os.getcwd() + "/images",
                                           parent=sub_upload,
                                           title='Select file',
@@ -335,6 +402,12 @@ def upload_new_window():
         return browse_button.filename
 
     def back_button():
+        """Closes the Upload New window
+        Args:
+            None
+        Returns:
+            None
+        """
         sub_upload.destroy()
         return
 
@@ -411,15 +484,51 @@ def upload_image(image_name, b64_str):
 
 
 def display_window(tk_image, size, image):
+    """Display window displays the image to the user
+    The display window allows the user to see the image
+    requested. From here, a user can compare the image
+    to another in the database or request more details
+    about the image being displayed.
+    Args:
+        tk_image (pyimage1): image in tkinter form
+        size (tuple): width, height of image
+        image (str): image name
+    Returns:
+        None
+    """
     def back_button():
+        """Closes the Display window
+        Args:
+            None
+        Returns:
+            None
+        """
         sub_disp.destroy()
         return
 
     def update_list_combobox():
+        """When down arrow of the combobox selected, image list updated
+        The combobox is continually populated with images available for
+        action in the database. Each time the box is selected, the list
+        is updated via a get request to the server.
+        Args:
+            None
+        Returns:
+            None
+        """
         image_list = get_image_list()
         image_choice_box['values'] = image_list
 
     def details_button():
+        """Details button displays upload/processed time and image size
+        If the user desires more information about the image, they can
+        access the time the image was uploaded or processed and the
+        size of the image in pixels.
+        Args:
+            None
+        Returns:
+            None
+        """
         time = get_details(image)
         deets_message = create_deets_message(time, size, image)
         messagebox.showinfo(title="Image Details",
@@ -427,6 +536,15 @@ def display_window(tk_image, size, image):
         return
 
     def compare_button():
+        """Opens the compare window to view two images side-by-side
+        The user has the option to compare two images to each other.
+        After one image is displayed, the user can select a second
+        image to view next to the first image.
+        Args:
+            None
+        Returns:
+            None
+        """
         if image_choice.get() == "":
             no_selection_message = "Please select an image to " \
                                    "compare with."
@@ -525,7 +643,24 @@ def create_deets_message(time, size, image):
 
 
 def compare_window(name1, tk_image1, name2, tk_image2):
+    """Allows user to view two images side-by-side
+    Viewing two images side-by-side allows the user to compare
+    the images for similarities and differences.
+    Args:
+        name1 (str): name of first image
+        tk_image1 (pyimage1): first image in tkinter format
+        name2 (str): name of second image
+        tk_image2 (pyimage1): second image in tkinter format
+    Returns:
+        None
+    """
     def back_button():
+        """Closes the Compare window
+        Args:
+            None
+        Returns:
+            None
+        """
         sub_comp.destroy()
         return
 

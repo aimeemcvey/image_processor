@@ -254,19 +254,19 @@ def upload_new_window():
         return
 
     def browse_button():
-        filename = filedialog.askopenfilename(initialdir=os.getcwd() + "/images",
-                                              parent=sub_upload,
-                                              title='Select file',
-                                              filetypes=(("JPG files", "*.jpg"),
-                                                         ("JPEG files", "*.jpeg"),
-                                                         ("PNG files", "*.png"),
-                                                         ("All files", "*.*")))
-        if filename is not None:
-            im_name = filename.split('/')
+        path = filedialog.askopenfilename(initialdir=os.getcwd() + "/images",
+                                          parent=sub_upload,
+                                          title='Select file',
+                                          filetypes=(("JPG files", "*.jpg"),
+                                                     ("JPEG files", "*.jpeg"),
+                                                     ("PNG files", "*.png"),
+                                                     ("All files", "*.*")))
+        if path is not None:
+            im_name = path.split('/')
             im_name = im_name[-1]
             image_entry.delete(0, END)
             image_entry.insert(0, im_name)
-        browse_button.filename = filename
+        browse_button.filename = path
         return browse_button.filename
 
     def back_button():

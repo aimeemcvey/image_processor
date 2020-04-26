@@ -253,6 +253,17 @@ def upload_new_window():
                                           icon="error")
         return
 
+    def browse_button():
+        file = filedialog.askopenfile(initialdir=os.getcwd()+"/images",
+                                      parent=sub_upload,
+                                      title='Select file',
+                                      filetypes=(("JPG files", "*.jpg"),
+                                                 ("JPEG files", "*.jpeg"),
+                                                 ("PNG files", "*.png"),
+                                                 ("All files", "*.*")))
+        print(file)
+        return
+
     def back_button():
         sub_upload.destroy()
         return
@@ -277,7 +288,7 @@ def upload_new_window():
     image_entry.grid(column=1, row=1)
 
     # Add buttons
-    browse_btn = ttk.Button(sub_upload, text="Browse")  #, command=browse_button)
+    browse_btn = ttk.Button(sub_upload, text="Browse", command=browse_button)
     browse_btn.grid(column=2, row=1)
     upload_btn = ttk.Button(sub_upload, text="Upload", command=upload_button)
     upload_btn.grid(column=1, row=2)

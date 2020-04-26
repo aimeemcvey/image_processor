@@ -182,7 +182,8 @@ def get_b64_from_db(image_name):
         return check_result, 400
     if status is "inv":
         b64_to_disp = locate_b64_string(image_name, "inverted")
-        logging.info("Image {} inverted b64 string returned".format(image_name))
+        logging.info("Image {} inverted b64 string "
+                     "returned".format(image_name))
     else:
         b64_to_disp = locate_b64_string(image_name)
         logging.info("Image {} b64 string returned".format(image_name))

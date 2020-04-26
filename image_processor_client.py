@@ -68,7 +68,6 @@ def main_window():
                                               icon="error")
                     return
                 if action.get() == "display":
-                    # img_out = display_image(nd_to_disp)
                     tk_image, pixel_size = ndarray_to_tkinter_image(nd_to_disp)
                     display_window(tk_image, pixel_size, image_choice.get())
                     return
@@ -130,6 +129,16 @@ def main_window():
 
 
 def get_image_list():
+    """Sends request to server for list of images in database
+    All recorded images (original and processed) saved on the
+    database are returned for list in the drop-down GUI
+    combobox. An image can then be selected to display or download.
+    Args:
+        None
+    Returns:
+        str: if failure, error message
+        list: if success, list of images in database
+    """
     r = requests.get(server_name + "/api/image_list")
     if r.status_code != 200:
         list_failure_message = "Failed to acquire image list: {} - {}" \
@@ -140,6 +149,16 @@ def get_image_list():
 
 
 def invert_image(image_name):
+    """Sends request to server to invert image
+    If requested, an image stored in the database can be
+    inverted and stored in the database. This image can
+    then be viewed or downloaded to the local computer.
+    Args:
+        image_name (str): image to invert
+    Returns:
+        str: if failure, error message
+        bool: if success, True
+    """
     image_to_invert = {"image": image_name}
     r = requests.post(server_name + "/api/invert_image", json=image_to_invert)
     if r.status_code != 200:
@@ -151,6 +170,15 @@ def invert_image(image_name):
 
 
 def fetch_b64(image_name):
+    """Sends request to server for b64 str
+    If requested, the b64 string corresponding to an
+    image stored in the database can be returned. This
+    image can then be converted for display.
+    Args:
+        image_name (str): image for which b64 str requested
+    Returns:
+        str: if failure, error message; if success, b64 str
+    """
     r = requests.get(server_name + "/api/fetch_b64/{}".format(image_name))
     if r.status_code != 200:
         failure_message = "Image collection failed: {} - {}" \
@@ -161,6 +189,13 @@ def fetch_b64(image_name):
 
 
 def b64_string_to_ndarray(b64_string):
+    """Converts image b64 string to ndarray
+    The image must be in the ndarray format for inversion.
+    Args:
+        b64_string (str): image in b64 str format
+    Returns:
+        numpy.ndarray: image in ndarray format
+    """
     image_bytes = base64.b64decode(b64_string)
     image_buf = io.BytesIO(image_bytes)
     img_ndarray = mpimg.imread(image_buf, format='JPG')
@@ -168,6 +203,15 @@ def b64_string_to_ndarray(b64_string):
 
 
 def ndarray_to_tkinter_image(img_ndarray):
+    """Converts image ndarray to tkinter image
+    The image must be in the tkinter image format for
+    display in the GUI.
+    Args:
+        img_ndarray (numpy.ndarray): image in ndarray format
+    Returns:
+        pyimage1: image in tkinter format
+        tuple: width, height of image in pixels
+    """
     f = io.BytesIO()
     imsave(f, img_ndarray, plugin="pil")
     out_img = io.BytesIO()
@@ -180,7 +224,16 @@ def ndarray_to_tkinter_image(img_ndarray):
 
 
 def resize_image(img_obj):
-    # resize image but keep aspect ratio
+    """Resizes tkinter image while keeping aspect ratio
+    The image must be in the tkinter image format for
+    display in the GUI. Resizing the image while maintaining
+    the aspect ratio allows all images to fit within the
+    computer screen while preventing image distortion.
+    Args:
+        img_obj (pyimage1): image in tkinter format
+    Returns:
+        pyimage1: resized image in tkinter format
+    """
     mywidth = 512
     wpercent = (mywidth / float(img_obj.size[0]))
     hsize = int((float(img_obj.size[1]) * float(wpercent)))
@@ -188,16 +241,17 @@ def resize_image(img_obj):
     return img_obj
 
 
-def display_image(img_ndarray):
-    try:
-        plt.imshow(img_ndarray, interpolation="nearest")
-        plt.show()
-    except TypeError:
-        return False
-    return True
-
-
 def create_filename(filename):
+    """Creates filename to save the downloaded image
+    The downloaded images are saved in the /images directory
+    on the local computer. If an image already exists in the
+    directory with the same name, integers are appended to
+    prevent saving over previous images.
+    Args:
+        filename (str): image name
+    Returns:
+        str: filename for saving image to computer
+    """
     new_filename = "images/{}".format(filename)
     found = True
     i = 0
@@ -213,6 +267,15 @@ def create_filename(filename):
 
 
 def b64_to_image_file(b64, new_filename):
+    """Converts image b64 string to image file
+    The image is written from the b64 string to the
+    filename given for downloading to the local computer.
+    Args:
+        b64 (str): image in b64 str format
+        new_filename (str): filename for saving image
+    Returns:
+        bool: True
+    """
     image_bytes = base64.b64decode(b64)
     with open(new_filename, "wb") as out_file:
         out_file.write(image_bytes)
@@ -307,6 +370,15 @@ def upload_new_window():
 
 
 def image_file_to_b64(filename):
+    """Converts image file to b64 str
+    The image must be converted to b64 format to be
+    sent to the server.
+    Args:
+        filename (str): filename of image
+    Returns:
+        str: if successful, b64 str
+        bool: if failure, file not found
+    """
     try:
         with open(filename, "rb") as image_file:
             b64_bytes = base64.b64encode(image_file.read())
@@ -317,6 +389,17 @@ def image_file_to_b64(filename):
 
 
 def upload_image(image_name, b64_str):
+    """Sends request to server to upload image to database
+    Any image on the computer can be uploaded to the cloud
+    database. All recorded images (original and processed)
+    saved on the database can be selected for display or download.
+    Args:
+        image_name (str): name of image to be uploaded
+        b64_str (str): corresponding b64 str to be uploaded
+    Returns:
+        str: if failure, error message
+        bool: if success, True
+    """
     new_image = {"image": image_name, "b64_string": b64_str}
     r = requests.post(server_name + "/api/upload_image", json=new_image)
     if r.status_code != 200:
@@ -400,6 +483,14 @@ def display_window(tk_image, size, image):
 
 
 def get_details(image_name):
+    """Sends request to server to get image details
+    Images are stored in the cloud database with timestamps
+    of the times they were uploaded or processed.
+    Args:
+        image_name (str): name of image
+    Returns:
+        str: if failure, error message; if success, timestamp
+    """
     r = requests.get(server_name + "/api/get_details/{}".format(image_name))
     if r.status_code != 200:
         failure_message = "Detail collection failed: {} - {}" \
@@ -410,6 +501,18 @@ def get_details(image_name):
 
 
 def create_deets_message(time, size, image):
+    """Creates message of image details for the GUI client
+    Image details returned include the time the image was
+    uploaded or processed and the image size in pixels. If
+    the image was original, the upload time is returned. If
+    the image was inverted, the processed time is returned.
+    Args:
+        time (str): timestamp of upload/processing
+        size (tuple): width, height of image in pixels
+        image (str): name of image
+    Returns:
+        str: message to be shown to user
+    """
     if "inverted" in image:
         time_type = "processed"
     else:

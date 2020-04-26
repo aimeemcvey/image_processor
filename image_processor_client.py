@@ -2,6 +2,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+from tkinter import filedialog
 import requests
 import base64
 import io
@@ -261,6 +262,7 @@ def upload_new_window():
     sub_upload.columnconfigure(0, pad=8)
     sub_upload.columnconfigure(1, pad=8)
     sub_upload.columnconfigure(2, pad=8)
+    sub_upload.rowconfigure(1, pad=5)
 
     # Add main label
     top_label = ttk.Label(sub_upload, text="Upload New",
@@ -275,10 +277,12 @@ def upload_new_window():
     image_entry.grid(column=1, row=1)
 
     # Add buttons
+    browse_btn = ttk.Button(sub_upload, text="Browse")  #, command=browse_button)
+    browse_btn.grid(column=2, row=1)
     upload_btn = ttk.Button(sub_upload, text="Upload", command=upload_button)
-    upload_btn.grid(column=0, row=6)
+    upload_btn.grid(column=1, row=2)
     back_btn = ttk.Button(sub_upload, text="Back", command=back_button)
-    back_btn.grid(column=1, row=6)
+    back_btn.grid(column=2, row=2, columnspan=2)
 
     return
 

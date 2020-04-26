@@ -262,13 +262,12 @@ def upload_new_window():
                                                          ("PNG files", "*.png"),
                                                          ("All files", "*.*")))
         if filename is not None:
-            print(filename)
             im_name = filename.split('/')
             im_name = im_name[-1]
             image_entry.delete(0, END)
             image_entry.insert(0, im_name)
-            return im_name
-        return
+        print(filename)
+        return filename
 
     def back_button():
         sub_upload.destroy()
@@ -292,6 +291,7 @@ def upload_new_window():
     image_selection = StringVar()
     image_entry = ttk.Entry(sub_upload, textvariable=image_selection, width=30)
     image_entry.grid(column=1, row=1)
+    image_entry.state(["readonly"])
 
     # Add buttons
     browse_btn = ttk.Button(sub_upload, text="Browse", command=browse_button)

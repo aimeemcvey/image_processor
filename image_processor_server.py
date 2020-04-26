@@ -216,9 +216,10 @@ def get_im_details(image_name):
         return check_result, 400
     if status is "inv":
         im_details = locate_details(image_name, "inverted")
+        logging.info("Image {} inverted details returned".format(image_name))
     else:
         im_details = locate_details(image_name)
-    logging.info("Image {} details returned".format(im_name))
+        logging.info("Image {} details returned".format(image_name))
     return jsonify(im_details), 200
 
 

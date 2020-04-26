@@ -263,6 +263,11 @@ def upload_new_window():
                                                          ("All files", "*.*")))
         if filename is not None:
             print(filename)
+            im_name = filename.split('/')
+            im_name = im_name[-1]
+            image_entry.delete(0, END)
+            image_entry.insert(0, im_name)
+            return im_name
         return
 
     def back_button():

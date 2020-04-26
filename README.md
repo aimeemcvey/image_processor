@@ -1,2 +1,4 @@
-# final_project_template
-BME 547 Final Project
+# Image Processor
+
+## Server
+The server is running at **vcm-13874.vm.duke.edu:5000**.

@@ -35,6 +35,12 @@ def post_new_image():
     if is_image_in_database(in_dict["image"]) is True:
         return "Image {} has already been added to server" \
                    .format(in_dict["image"]), 400
+    # check if inverted form of image in db
+    if "inverted" in in_dict["image"]:
+        image_name = return_name(in_dict["image"])
+        if is_image_in_database(image_name) is True:
+            return "Image {} is already on server under {} entry" \
+                   .format(in_dict["image"], image_name), 400
     add_image_to_db(in_dict)
     return "Image added", 200
 

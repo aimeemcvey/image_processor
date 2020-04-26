@@ -251,6 +251,7 @@ def upload_new_window():
                 messagebox.askretrycancel(title="Upload Failure",
                                           message=upload_out,
                                           icon="error")
+                upload_btn["state"] = "disabled"
         return
 
     def browse_button():
@@ -262,6 +263,7 @@ def upload_new_window():
                                                      ("PNG files", "*.png"),
                                                      ("All files", "*.*")))
         if path is not None:
+            upload_btn["state"] = "normal"
             im_name = path.split('/')
             im_name = im_name[-1]
             image_entry.delete(0, END)
@@ -297,6 +299,7 @@ def upload_new_window():
     browse_btn.grid(column=2, row=1)
     upload_btn = ttk.Button(sub_upload, text="Upload", command=upload_button)
     upload_btn.grid(column=1, row=2)
+    upload_btn["state"] = "disabled"
     back_btn = ttk.Button(sub_upload, text="Back", command=back_button)
     back_btn.grid(column=2, row=2, columnspan=2)
 

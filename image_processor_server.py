@@ -15,6 +15,8 @@ from skimage import util
 connect("mongodb+srv://db_access:swim4life@aimeemcv-7rfsl.mongodb.net/"
         "imagedb?retryWrites=true&w=majority")
 app = Flask(__name__)
+logging.basicConfig(filename="processor_info.log", filemode="w",
+                    level=logging.INFO)
 
 
 class Image(MongoModel):
@@ -64,6 +66,7 @@ def add_image_to_db(in_dict):
                       image_formats={"b64_str": in_dict["b64_string"]},
                       upload_time=timestamp)
     new_image.save()
+    logging.info("Image {} added to database".format(in_dict["image"]))
     return new_image.image_name
 
 
@@ -164,6 +167,7 @@ def add_inverted_image_to_db(b64_str, name):
         doc.processed_time = timestamp
         doc.image_formats.update({"inverted_b64_str": b64_str})
         doc.save()
+    logging.info("Image {} inverted and added to database".format(name))
     return doc.image_name
 
 
@@ -178,8 +182,10 @@ def get_b64_from_db(image_name):
         return check_result, 400
     if status is "inv":
         b64_to_disp = locate_b64_string(image_name, "inverted")
+        logging.info("Image {} inverted b64 string returned".format(image_name))
     else:
         b64_to_disp = locate_b64_string(image_name)
+        logging.info("Image {} b64 string returned".format(image_name))
     return jsonify(b64_to_disp), 200
 
 
@@ -211,6 +217,7 @@ def get_im_details(image_name):
         im_details = locate_details(image_name, "inverted")
     else:
         im_details = locate_details(image_name)
+    logging.info("Image {} details returned".format(im_name))
     return jsonify(im_details), 200
 
 

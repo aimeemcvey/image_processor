@@ -16,10 +16,8 @@ import PIL
 from PIL import Image, ImageTk
 from skimage.io import imsave
 
-server_name = "http://127.0.0.1:5000"
-
-
-# server_name = "http://vcm-13874.vm.duke.edu:5000"
+# server_name = "http://127.0.0.1:5000"
+server_name = "http://vcm-13874.vm.duke.edu:5000"
 
 
 def main_window():

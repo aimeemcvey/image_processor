@@ -1,0 +1,580 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>image_processor_server module &#8212; image_processor 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="image_processor_client module" href="image_processor_client.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-image_processor_server">
+<span id="image-processor-server-module"></span><h1>image_processor_server module<a class="headerlink" href="#module-image_processor_server" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="image_processor_server.Image">
+<em class="property">class </em><code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">Image</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.Image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pymodm.base.models.MongoModel</span></code></p>
+<dl class="py exception">
+<dt id="image_processor_server.Image.DoesNotExist">
+<em class="property">exception </em><code class="sig-name descname">DoesNotExist</code><a class="headerlink" href="#image_processor_server.Image.DoesNotExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pymodm.errors.DoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="image_processor_server.Image.MultipleObjectsReturned">
+<em class="property">exception </em><code class="sig-name descname">MultipleObjectsReturned</code><a class="headerlink" href="#image_processor_server.Image.MultipleObjectsReturned" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pymodm.errors.MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="image_processor_server.Image.image_formats">
+<code class="sig-name descname">image_formats</code><a class="headerlink" href="#image_processor_server.Image.image_formats" title="Permalink to this definition">¶</a></dt>
+<dd><p>A field that stores a regular Python dictionary.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="image_processor_server.Image.image_name">
+<code class="sig-name descname">image_name</code><a class="headerlink" href="#image_processor_server.Image.image_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>A field that stores unicode strings.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="image_processor_server.Image.objects">
+<code class="sig-name descname">objects</code><a class="headerlink" href="#image_processor_server.Image.objects" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default manager used for <code class="xref py py-class docutils literal notranslate"><span class="pre">MongoModel</span></code> instances.</p>
+<p>This implementation of <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseManager</span></code> uses
+<code class="xref py py-class docutils literal notranslate"><span class="pre">QuerySet</span></code> as its QuerySet class.</p>
+<p>This Manager class (accessed via the <code class="docutils literal notranslate"><span class="pre">objects</span></code> attribute on a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">MongoModel</span></code>) is used by default for all MongoModel classes,
+unless another Manager instance is supplied as an attribute within the
+MongoModel definition.</p>
+<p>Managers have two primary functions:</p>
+<ol class="arabic simple">
+<li><p>Construct <code class="xref py py-class docutils literal notranslate"><span class="pre">QuerySet</span></code> instances for use when
+querying or working with <code class="xref py py-class docutils literal notranslate"><span class="pre">MongoModel</span></code> instances in bulk.</p></li>
+<li><p>Define collection-level functionality that can be reused across different
+MongoModel types.</p></li>
+</ol>
+<p>If you created a custom QuerySet that makes certain queries easier, for
+example, you will need to create a custom Manager type that returns this
+queryset using the <code class="xref py py-meth docutils literal notranslate"><span class="pre">from_queryset()</span></code>
+method:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">UserQuerySet</span><span class="p">(</span><span class="n">QuerySet</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">active</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Return only active users.&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw</span><span class="p">({</span><span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">MongoModel</span><span class="p">):</span>
+    <span class="n">active</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">()</span>
+    <span class="c1"># Add our custom Manager.</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">Manager</span><span class="o">.</span><span class="n">from_queryset</span><span class="p">(</span><span class="n">UserQuerySet</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the above example, we added a <cite>users</cite> attribute on <cite>User</cite> so that we can
+use the <cite>active</cite> method on our new QuerySet type:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">active_users</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">active</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If we wanted every method on the QuerySet to examine active users <em>only</em>, we
+can do that by customizing the Manager itself:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">UserManager</span><span class="p">(</span><span class="n">Manager</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Override get_queryset, so that every QuerySet created will</span>
+        <span class="c1"># have this filter applied.</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">UserManager</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">get_queryset</span><span class="p">()</span><span class="o">.</span><span class="n">raw</span><span class="p">(</span>
+            <span class="p">{</span><span class="s2">&quot;active&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">MongoModel</span><span class="p">):</span>
+    <span class="n">active</span> <span class="o">=</span> <span class="n">fields</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">()</span>
+    <span class="n">users</span> <span class="o">=</span> <span class="n">UserManager</span><span class="p">()</span>
+
+<span class="n">active_users</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">users</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="image_processor_server.Image.processed_time">
+<code class="sig-name descname">processed_time</code><a class="headerlink" href="#image_processor_server.Image.processed_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>A field that stores unicode strings.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="image_processor_server.Image.upload_time">
+<code class="sig-name descname">upload_time</code><a class="headerlink" href="#image_processor_server.Image.upload_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>A field that stores unicode strings.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.add_image_to_db">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">add_image_to_db</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.add_image_to_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds new image to image database list via image name
+The image name, corresponding b64 str, and upload timestamp
+are added to the image database to maintain proper,
+permanent record of uploaded images.
+:param in_dict: input with image name and b64 str
+:type in_dict: dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>image name the data was saved under in database</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.add_inverted_image_to_db">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">add_inverted_image_to_db</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">b64_str</span></em>, <em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.add_inverted_image_to_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds inverted image to image database list via image name
+The inverted image’s b64 str and processing timestamp
+are added to the image database under the original image
+name to maintain proper, permanent record of uploaded images.
+:param b64_str: b64 str to be added to database
+:type b64_str: str
+:param name: image name under which the str added
+:type name: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>image name the data was saved under in database</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.b64_string_to_ndarray">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">b64_string_to_ndarray</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">b64_string</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.b64_string_to_ndarray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts image b64 string to ndarray
+The image must be in the ndarray format for inversion.
+:param b64_string: image in b64 str format
+:type b64_string: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>image in ndarray format</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.generate_image_list">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">generate_image_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.generate_image_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates list of all images stored in database
+The list of images are provided for the user to choose
+from to perform selected actions upon, including
+display and download.
+:param None:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>sorted list of all images stored in database</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.get_b64_from_db">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">get_b64_from_db</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.get_b64_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtains and returns b64 str corresponding to image name
+When a get request is made, the input must be validated
+before the corresponding b64 str is collected from the
+database and returned to the client. Both original and
+inverted image requests are accommodated. Only images
+present in the database are available for client selection.
+:param image_name: image for which b64 str requested
+:type image_name: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>results of post request; b64 str if success
+int: HTTP status code</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.get_im_details">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">get_im_details</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.get_im_details" title="Permalink to this definition">¶</a></dt>
+<dd><p>Obtains and returns details corresponding to image name
+When a get request is made, the input must be validated
+before the corresponding details are collected from the
+database and returned to the client. Both original and
+inverted image requests are accommodated. Only images
+present in the database are available for client selection.
+:param image_name: image for which b64 str requested
+:type image_name: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>results of post request
+int: HTTP status code</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.get_image_list_from_db">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">get_image_list_from_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.get_image_list_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of images in database
+If requested, all recorded images (original and processed)
+saved on the database are returned. An image can then be
+selected to display or download.
+:param None:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>all stored images
+int: HTTP status code</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.is_image_in_database">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">is_image_in_database</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.is_image_in_database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if image has previously been added to database
+To be added to the image database, the image must not
+previously have been added to the database.
+:param name: image name
+:type name: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if name in database, True; if not, False</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.is_inverted_in_database">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">is_inverted_in_database</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.is_inverted_in_database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if image has previously been inverted
+To be inverted and added to the image database, the image
+must not previously have been inverted and added.
+:param name: image name
+:type name: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if name in database, True; if not, False</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.locate_b64_string">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">locate_b64_string</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im_name</span></em>, <em class="sig-param"><span class="n">which</span><span class="o">=</span><span class="default_value">'orig'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.locate_b64_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Locates b64 str corresponding to image name and status
+The b64 string was stored under the image name. To invert
+or display the image, the b64 str is needed for conversion
+to the proper data type. The b64 string can be located for
+the original or inverted image.
+:param im_name: image name
+:type im_name: str
+:param which: status of image (default “orig)
+:type which: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>b64 str corresponding to image</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.locate_details">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">locate_details</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">im_name</span></em>, <em class="sig-param"><span class="n">which</span><span class="o">=</span><span class="default_value">'orig'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.locate_details" title="Permalink to this definition">¶</a></dt>
+<dd><p>Locates details corresponding to image name and status
+Image details were stored under the image name. Details can
+be located for the original or inverted image. If the image
+is original, the upload time is returned. If the image is
+inverted, the processed time is returned.
+:param im_name: image name
+:type im_name: str
+:param which: status of image (default “orig)
+:type which: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>upload or processed time of image</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.ndarray_to_b64_string">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">ndarray_to_b64_string</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img_ndarray</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.ndarray_to_b64_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts image ndarray to b64 str
+The image must be in the b64 str format to be
+added to the database and sent to the client.
+:param img_ndarray: image in ndarray format
+:type img_ndarray: numpy.ndarray</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>image in b64 str format</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.post_invert_image">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">post_invert_image</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.post_invert_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inverts image and adds to the image database via name
+When a post request is made to /api/invert_image, the input
+must be validated and checked to confirm the image is
+already in the database before the image is inverted and
+stored under the original image name.
+:param None:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>results of post request; b64 str if success
+int: HTTP status code</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.post_new_image">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">post_new_image</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.post_new_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds new image to the image database via name
+When a post request is made to /api/upload_image, the input
+must be validated and checked to confirm the image isn’t
+already in the database before the image name, corresponding
+b64 string, and upload time are added to the image database.
+:param None:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>results of post request
+int: HTTP status code</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.process_image_inversion">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">process_image_inversion</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ndarray</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.process_image_inversion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inverts ndarray to invert image
+The image must be in the ndarray format for inversion.
+This ndarray can then be inverted to obtain an ndarray
+that can further be converted into a b64 str and
+displayable image.
+:param ndarray: image in ndarray format
+:type ndarray: numpy.ndarray</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>inverted image in ndarray format</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.return_name">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">return_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.return_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts inverted image name to original name
+Inverted images are stored in the database under the image
+they’re derived from. As such, to locate information
+corresponding to the inverted image, the database must
+be queried via the original image name.
+:param image_name: inverted image name
+:type image_name: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>original image name</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.verify_image_info">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">verify_image_info</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.verify_image_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verifies post request was made with correct format
+The input dictionary must have the appropriate data keys
+and types, or be convertible to correct types, to be added
+to the image database.
+:param in_dict: input with image name and b64 str
+:type in_dict: dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if error, returns error message
+bool: if input verified, returns True</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.verify_image_name">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">verify_image_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">in_dict</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.verify_image_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verifies post request was made with correct format
+The input dictionary must have the appropriate data keys
+and types, or be convertible to correct types, to be added
+to the image database.
+:param in_dict: input with image name
+:type in_dict: dict</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if error, returns error message
+bool: if input verified, returns True</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_server.verify_name_input">
+<code class="sig-prename descclassname">image_processor_server.</code><code class="sig-name descname">verify_name_input</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_server.verify_name_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verifies get request was made with correct format
+The input name in the get URL must have the appropriate data
+type and correspond to an image in the database to locate
+corresponding information.
+:param image: image name
+:type image: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if error, returns error message
+bool: if input verified, returns True</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">image_processor</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="image_processor_client.html">image_processor_client module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">image_processor_server module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="image_processor_client.html" title="previous chapter">image_processor_client module</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Aimee McVey.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/image_processor_server.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

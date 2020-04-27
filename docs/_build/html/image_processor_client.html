@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>image_processor_client module &#8212; image_processor 1.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="image_processor_server module" href="image_processor_server.html" />
+    <link rel="prev" title="Welcome to image_processor’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-image_processor_client">
+<span id="image-processor-client-module"></span><h1>image_processor_client module<a class="headerlink" href="#module-image_processor_client" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="image_processor_client.b64_string_to_ndarray">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">b64_string_to_ndarray</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">b64_string</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.b64_string_to_ndarray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts image b64 string to ndarray
+The image must be in the ndarray format for inversion.
+:param b64_string: image in b64 str format
+:type b64_string: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>image in ndarray format</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.b64_to_image_file">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">b64_to_image_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">b64</span></em>, <em class="sig-param"><span class="n">new_filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.b64_to_image_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts image b64 string to image file
+The image is written from the b64 string to the
+filename given for downloading to the local computer.
+:param b64: image in b64 str format
+:type b64: str
+:param new_filename: filename for saving image
+:type new_filename: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>True</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.compare_window">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">compare_window</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name1</span></em>, <em class="sig-param"><span class="n">tk_image1</span></em>, <em class="sig-param"><span class="n">name2</span></em>, <em class="sig-param"><span class="n">tk_image2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.compare_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Allows user to view two images side-by-side
+Viewing two images side-by-side allows the user to compare
+the images for similarities and differences.
+:param name1: name of first image
+:type name1: str
+:param tk_image1: first image in tkinter format
+:type tk_image1: pyimage1
+:param name2: name of second image
+:type name2: str
+:param tk_image2: second image in tkinter format
+:type tk_image2: pyimage1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.create_deets_message">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">create_deets_message</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">size</span></em>, <em class="sig-param"><span class="n">image</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.create_deets_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates message of image details for the GUI client
+Image details returned include the time the image was
+uploaded or processed and the image size in pixels. If
+the image was original, the upload time is returned. If
+the image was inverted, the processed time is returned.
+:param time: timestamp of upload/processing
+:type time: str
+:param size: width, height of image in pixels
+:type size: tuple
+:param image: name of image
+:type image: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>message to be shown to user</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.create_filename">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">create_filename</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.create_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates filename to save the downloaded image
+The downloaded images are saved in the /images directory
+on the local computer. If an image already exists in the
+directory with the same name, integers are appended to
+prevent saving over previous images.
+:param filename: image name
+:type filename: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>filename for saving image to computer</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.display_window">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">display_window</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tk_image</span></em>, <em class="sig-param"><span class="n">size</span></em>, <em class="sig-param"><span class="n">image</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.display_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display window displays the image to the user
+The display window allows the user to see the image
+requested. From here, a user can compare the image
+to another in the database or request more details
+about the image being displayed.
+:param tk_image: image in tkinter form
+:type tk_image: pyimage1
+:param size: width, height of image
+:type size: tuple
+:param image: image name
+:type image: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.fetch_b64">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">fetch_b64</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.fetch_b64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends request to server for b64 str
+If requested, the b64 string corresponding to an
+image stored in the database can be returned. This
+image can then be converted for display.
+:param image_name: image for which b64 str requested
+:type image_name: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if failure, error message; if success, b64 str</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.get_details">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">get_details</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.get_details" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends request to server to get image details
+Images are stored in the cloud database with timestamps
+of the times they were uploaded or processed.
+:param image_name: name of image
+:type image_name: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if failure, error message; if success, timestamp</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.get_image_list">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">get_image_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.get_image_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends request to server for list of images in database
+All recorded images (original and processed) saved on the
+database are returned for list in the drop-down GUI
+combobox. An image can then be selected to display or download.
+:param None:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if failure, error message
+list: if success, list of images in database</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.image_file_to_b64">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">image_file_to_b64</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.image_file_to_b64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts image file to b64 str
+The image must be converted to b64 format to be
+sent to the server.
+:param filename: filename of image
+:type filename: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if successful, b64 str
+bool: if failure, file not found</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.invert_image">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">invert_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image_name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.invert_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends request to server to invert image
+If requested, an image stored in the database can be
+inverted and stored in the database. This image can
+then be viewed or downloaded to the local computer.
+:param image_name: image to invert
+:type image_name: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if failure, error message
+bool: if success, True</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.main_window">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">main_window</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.main_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main window with image selection and action options
+The main window allows the user to select an image from those
+available in the database for inversion, display, or download.
+From here, a user can open the upload window as well.
+:param None:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.ndarray_to_tkinter_image">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">ndarray_to_tkinter_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img_ndarray</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.ndarray_to_tkinter_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts image ndarray to tkinter image
+The image must be in the tkinter image format for
+display in the GUI.
+:param img_ndarray: image in ndarray format
+:type img_ndarray: numpy.ndarray</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>image in tkinter format
+tuple: width, height of image in pixels</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pyimage1</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.resize_image">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">resize_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">img_obj</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.resize_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resizes tkinter image while keeping aspect ratio
+The image must be in the tkinter image format for
+display in the GUI. Resizing the image while maintaining
+the aspect ratio allows all images to fit within the
+computer screen while preventing image distortion.
+:param img_obj: image in tkinter format
+:type img_obj: pyimage1</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>resized image in tkinter format</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>pyimage1</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.upload_image">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">upload_image</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">image_name</span></em>, <em class="sig-param"><span class="n">b64_str</span></em><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.upload_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sends request to server to upload image to database
+Any image on the computer can be uploaded to the cloud
+database. All recorded images (original and processed)
+saved on the database can be selected for display or download.
+:param image_name: name of image to be uploaded
+:type image_name: str
+:param b64_str: corresponding b64 str to be uploaded
+:type b64_str: str</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>if failure, error message
+bool: if success, True</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="image_processor_client.upload_new_window">
+<code class="sig-prename descclassname">image_processor_client.</code><code class="sig-name descname">upload_new_window</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#image_processor_client.upload_new_window" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload New window allows image to be selected and uploaded
+An image can be selected from anywhere on the computer for
+upload to the cloud server. The Upload button is inactivated
+until an image is selected via the Browse button.
+:param None:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">image_processor</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">image_processor_client module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image_processor_server.html">image_processor_server module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to image_processor’s documentation!</a></li>
+      <li>Next: <a href="image_processor_server.html" title="next chapter">image_processor_server module</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Aimee McVey.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/image_processor_client.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

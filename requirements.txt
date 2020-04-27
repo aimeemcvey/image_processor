@@ -9,3 +9,4 @@ flask
 datetime
 pymodm
 dnspython
+sphinx

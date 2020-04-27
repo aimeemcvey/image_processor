@@ -5,7 +5,7 @@ This project is an image processor that allows uploading of images to a web-serv
 The server is running at **vcm-13874.vm.duke.edu:5000**.
 
 ## Instructions
-A demo showcasing use of the GUI client can be viewed at xxx.
+A demo showcasing use of the GUI client can be viewed in the `Image_Processor_Demo.mp4` file.
 
 To run the GUI client, input `image_processor_client.py` in a bash window. The GUI client presents a drop-down box housing the available images on the server. Any of these images can be selected and acted upon. The options below the drop-down box allow the user to select whether to invert, display, or download the image. The `Ok` button will implement the selected option on the selected image. Each action must be confirmed by the user before implementation. The `Cancel` option closes the GUI window.
 

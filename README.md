@@ -2,7 +2,7 @@
 This project is an image processor that allows uploading of images to a web-server, stores those uploaded images in a database, allows performing image-processing tasks on the web-server, and also permits displaying, downloading, and comparing the original and processed images.
 
 ## Server
-The server is running at **vcm-13874.vm.duke.edu:5000**.
+The server is located at **vcm-13874.vm.duke.edu:5000**. It is NOT currently running to save resources.
 
 ## Instructions
 A demo showcasing use of the GUI client can be viewed in the `Image_Processor_Demo.mp4` file.
